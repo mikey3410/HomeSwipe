@@ -2,56 +2,49 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from "firebase/auth";
+import { createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword
+ } from "firebase/auth";
 import FullPageLoader from '../components/FullpageLoader.jsx';
 import React, { useState } from 'react';
 import { auth } from "../firebase/config.js"
-
 
 function LoginPage() {
     const [isLoading, setLoading] = useState(false);
     const [loginType, setLoginType] = useState('login');
     const [userCreds, setUserCreds] = useState({});
-    const [error, setError] =useState(''); 
+    const [error, setError] = useState('');
 
-    //used to ahnle credentials will pass the value
     function handleCreds(e) {
         setUserCreds({ ...userCreds, [e.target.name]: e.target.value });
-        console.log(userCreds);
     }
 
-    //User to handle signup
     function handleSignup(e) {
         e.preventDefault();
+        setLoading(true);
 
-        //Async function will send to firebase
         createUserWithEmailAndPassword(auth, userCreds.email, userCreds.password)
-            //If successful
             .then((userCredential) => {
-                // Signed up 
-                const user = userCredential.user;
-                console.log(user);
-                // ...
+                console.log(userCredential.user);
+                setLoading(false);
             })
-            //Unsuccessful will display to user 
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                setError(error.message); 
-                console.log(errorCode);
-                console.log(errorMessage);
-                // ..
+                setError(error.message);
+                setLoading(false);
             });
     }
 
     return (
         <>
-            {isLoading && <FullPageLoader></FullPageLoader>}
+            {isLoading && <FullPageLoader />}
 
-            <div className="container login-page">
-                <section>
-                    <h1>Welcome to the HomeSwipe</h1>
-                    <p>Login or create an account to continue</p>
-                    <div className="login-type">
+            <div className="flex items-center justify-center min-h-screen bg-white">
+                <div className="bg-white border border-gray-300 shadow-md rounded-lg p-8 w-full max-w-md">
+                    <h1 className="text-2xl font-bold text-black text-center">Welcome to HomeSwipe</h1>
+                    <p className="text-gray-700 text-center mb-6">Login or create an account to continue</p>
+
+                    {/* Login/Signup Toggle */}
+                    <div className="flex justify-center space-x-4 mb-6">
                         <button
                             className={`px-4 py-2 rounded-lg font-semibold transition ${
                                 loginType === 'login' ? 'bg-blue-600 text-white' : 'bg-transparent border border-black text-black'
@@ -99,10 +92,10 @@ function LoginPage() {
                             Forgot Password?
                         </p>
                     </form>
-                </section>
+                </div>
             </div>
         </>
-    )
+    );
 }
 
-export default LoginPage
+export default LoginPage;
