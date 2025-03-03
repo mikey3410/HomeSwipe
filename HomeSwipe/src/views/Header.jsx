@@ -40,7 +40,6 @@ export default function Navbar() {
 
         {/* Center: "HomeSwipe" text */}
         <h1 className="text-xl font-bold text-black">HomeSwipe</h1>
-
         {/* Right: Chat button */}
         <button className="text-gray-600 hover:text-gray-800 focus:outline-none">
           <svg
@@ -60,7 +59,11 @@ export default function Navbar() {
             />
           </svg>
         </button>
-      </div>
+          <button className="px-4 py-2 rounded-lg font-semibold transition bg-blue-600 text-white"
+            onClick={() => setLoginType('login')}>
+              Login
+        </button>
+        </div>
     </nav>
   );
 }
