@@ -1,9 +1,9 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import FullPageLoader from "../components/FullpageLoader.jsx";
 import React, { useState } from "react";
 import { auth } from "../firebase/config.js";
 
-function LoginPage() {
+function SignupPage() {
   const [isLoading, setLoading] = useState(false);
   const [userCreds, setUserCreds] = useState({});
   const [error, setError] = useState("");
@@ -12,11 +12,11 @@ function LoginPage() {
     setUserCreds({ ...userCreds, [e.target.name]: e.target.value });
   }
 
-  function handleLogin(e) {
+  function handleSignup(e) {
     e.preventDefault();
     setLoading(true);
 
-    signInWithEmailAndPassword(auth, userCreds.email, userCreds.password)
+    createUserWithEmailAndPassword(auth, userCreds.email, userCreds.password)
       .then((userCredential) => {
         console.log(userCredential.user);
         setLoading(false);
@@ -34,9 +34,11 @@ function LoginPage() {
       <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="bg-white border border-gray-300 shadow-md rounded-lg p-8 w-full max-w-md">
           <h1 className="text-2xl font-bold text-black text-center">
-            Welcome to HomeSwipe
+            Create an Account
           </h1>
-          <p className="text-gray-700 text-center mb-6">Log in to continue</p>
+          <p className="text-gray-700 text-center mb-6">
+            Sign up to access HomeSwipe
+          </p>
 
           {/* Form Inputs */}
           <form className="space-y-4">
@@ -69,17 +71,14 @@ function LoginPage() {
               </div>
             )}
 
-            {/* Login Button */}
+            {/* Sign Up Button */}
             <button
-              onClick={handleLogin}
+              onClick={handleSignup}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition"
-            >
-              Login
-            </button>
 
-            <p className="text-sm text-black text-center mt-4 cursor-pointer hover:underline">
-              Forgot Password?
-            </p>
+            >
+              Sign Up
+            </button>
           </form>
         </div>
       </div>
@@ -87,4 +86,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;
