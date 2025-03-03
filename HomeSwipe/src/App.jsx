@@ -1,19 +1,24 @@
-import { useState } from 'react'
-import './App.css'
-import Header from './views/Header'
-import LoginPage from './views/LoginPage'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./views/Header";
+import LoginPage from "./views/LoginPage";
+import SignupPage from "./views/SignupPage";
+import Home from "./views/Home"; // Import Home page
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-    <header className="App-header">
-      <Header />
-    </header>
-    <LoginPage /> {/* Add this line to render the login page */}
-  </div>
-  )
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Header />
+        </header>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
