@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
+} from "firebase/auth";
 import FullPageLoader from '../components/FullpageLoader.jsx';
 import React, { useState } from 'react';
 import { auth } from "../firebase/config.js"
@@ -28,6 +31,21 @@ function LoginPage() {
             });
     }
 
+    function handleLogin(e) {
+        e.preventDefault(); 
+        signInWithEmailAndPassword(auth, userCreds.email, userCreds.password)
+            .then((userCredential) => {
+                console.log(userCredential.user);
+                // Signed in 
+                const user = userCredential.user;
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    }
+
     return (
         <>
             {isLoading && <FullPageLoader />}
@@ -40,21 +58,18 @@ function LoginPage() {
                     {/* Login/Signup Toggle */}
                     <div className="flex justify-center space-x-4 mb-6">
                         <button
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${
-                                loginType === 'login' ? 'bg-blue-600 text-white' : 'bg-transparent border border-black text-black'
-                            }`}
+                            className={`px-4 py-2 rounded-lg font-semibold transition ${loginType === 'login' ? 'bg-blue-600 text-white' : 'bg-transparent border border-black text-black'
+                                }`}
                             onClick={() => setLoginType('login')}>
                             Login
                         </button>
                         <button
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${
-                                loginType === 'signup' ? 'bg-green-600 text-white' : 'bg-transparent border border-black text-black'
-                            }`}
+                            className={`px-4 py-2 rounded-lg font-semibold transition ${loginType === 'signup' ? 'bg-green-600 text-white' : 'bg-transparent border border-black text-black'
+                                }`}
                             onClick={() => setLoginType('signup')}>
                             Signup
                         </button>
                     </div>
-
                     {/* Form Inputs */}
                     <form className="space-y-4">
                         <div>
@@ -88,7 +103,7 @@ function LoginPage() {
 
                         {/* Action Buttons */}
                         {loginType === 'login' ? (
-                            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
+                            <button onClick={handleLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
                                 Login
                             </button>
                         ) : (

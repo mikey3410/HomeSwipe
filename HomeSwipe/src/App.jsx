@@ -1,18 +1,25 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Header from './views/Header'
-import LoginPage from './views/LoginPage'
+import Header from './views/Header.jsx'
+import LoginPage from './views/LoginPage.jsx'
+import HomePage from './views/LandingPage.jsx' // Assuming you have a HomePage component
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-    <header className="App-header">
-      <Header />
-    </header>
-    <LoginPage /> {/* Add this line to render the login page */}
-  </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Header />
+        </header>
+        <Routes>
+          <Route path="/" element={<HomePage />} /> {/* Route for the landing page */}
+          <Route path="/login" element={<LoginPage />} /> {/* Route for the login page */}
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
