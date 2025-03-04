@@ -1,6 +1,5 @@
-import React from "react";
 import { Link } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa'; // Assuming you're using react-icons for the house logo
+import { FaHome } from 'react-icons/fa';
 
 function Header() {
   return (
