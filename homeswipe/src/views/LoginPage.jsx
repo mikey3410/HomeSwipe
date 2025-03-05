@@ -67,7 +67,7 @@ function LoginPage() {
                             className={`px-4 py-2 rounded-lg font-semibold transition ${loginType === 'signup' ? 'bg-green-600 text-white' : 'bg-transparent border border-black text-black'
                                 }`}
                             onClick={() => setLoginType('signup')}>
-                            Signup
+                            Sign Up
                         </button>
                     </div>
                     {/* Form Inputs */}

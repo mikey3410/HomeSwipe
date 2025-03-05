@@ -3,7 +3,7 @@ import { FaHome } from 'react-icons/fa';
 
 function Header() {
   return (
-    <header className="bg-white shadow-md py-4 px-6">
+    <header className="bg-white shadow- py-4 px-6">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo and brand name with link to landing page */}
         <Link to="/" className="flex items-center gap-2 group">

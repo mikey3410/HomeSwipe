@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function LandingPage() {
@@ -47,20 +48,46 @@ function LandingPage() {
             ))
           )}
         </div>
-      </div>
+    </div>
 
       {/* Content overlay */}
-      <div className="relative z-20 flex flex-col items-center justify-center flex-grow text-white px-4">
-        {/* Enhanced title with gradient and glow */}
+    <div className="relative z-20 flex flex-col items-center justify-center flex-grow text-white px-4">
+        {/* Enhanced title with dramatic typography and multiple shadows */}
         <div className="relative mb-12 group">
-          <h1 className="text-6xl md:text-8xl font-bold text-blue-400 text-center bg-clip-text drop-shadow-lg">
-            Home <span className="text-blue-400">Swipe</span> Home
-          </h1>
-          <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-500/20 rounded-lg blur-xl opacity-30 -z-10"></div>
+        <h1 className="
+            text-6xl md:text-9xl 
+            font-extrabold 
+            text-center 
+            tracking-tighter 
+            relative
+            inline-block
+            px-4
+            py-2
+            bg-gradient-to-r from-blue-800 to-blue-300 
+            text-transparent bg-clip-text
+        ">
+        <div className="relative z-10 flex items-center justify-center">
+        <div className="relative inline-block mr-6">
+            <FaHome className="
+                text-5xl 
+                md:text-8xl 
+                text-white 
+                group-hover:text-blue-300 
+                transition-colors 
+                z-10 
+                relative 
+                drop-shadow-[0_0_10px_rgba(59,130,246,0.7)]
+                " />
+                </div>
+                <span className="text-6xl md:text-9xl font-extrabold text-center text-blue-400 bg-gradient-to-r from-blue-800 to-blue-300 bg-clip-text text-transparent">
+                Home Swipe Home
+                </span>
+            </div>
+        </h1>
         </div>
         
+        {/* Rest of the component remains the same */}
         <div className="flex flex-col gap-5 w-full max-w-xs">
-          {/* Create account button with glow effect */}
           <Link to="/login" className="group relative inline-flex items-center justify-center w-full">
             <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-300"></span>
             <span className="relative w-full bg-gray-900 hover:bg-gray-800 text-white py-3 px-6 rounded-full font-medium text-center transition-all duration-300 group-hover:shadow-lg border border-gray-700">
@@ -68,10 +95,9 @@ function LandingPage() {
             </span>
           </Link>
           
-          {/* Log in button with subtle glow */}
           <Link to="/login" className="group relative inline-flex items-center justify-center w-full">
-            <span className="absolute -inset-0.5 bg-gradient-to-r from-gray-400 to-gray-300 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></span>
-            <span className="relative w-full bg-white hover:bg-gray-50 text-gray-800 py-3 px-6 rounded-full font-medium text-center transition-all duration-300 group-hover:shadow-md border border-gray-200">
+            <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-300"></span>
+            <span className="relative w-full bg-gray-900 hover:bg-gray-800 text-white py-3 px-6 rounded-full font-medium text-center transition-all duration-300 group-hover:shadow-lg border border-gray-700">
               Log in
             </span>
           </Link>
@@ -82,7 +108,7 @@ function LandingPage() {
       <footer className="relative z-20 bg-gray-900 text-gray-400 py-4 px-6 w-full">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
           <div className="mb-2 md:mb-0">
-            © 2023 HomeSwipe. All rights reserved.
+            © 2025 HomeSwipe. All rights reserved.
           </div>
           <div className="flex gap-4">
             <a href="#" className="hover:text-white transition-colors">Contact</a>
