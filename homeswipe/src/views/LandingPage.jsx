@@ -14,7 +14,7 @@ function LandingPage() {
         
         const loadedImages = await Promise.all(imagePromises);
         // Extract the default export (image URL) from each module
-        setImages(loadedImages.map(module => module.default));
+        setImages(loadedImages.map(module => module.default).slice(0, 10)); // Limit to exactly 10 images
       } catch (error) {
         console.error("Error loading images:", error);
       }
@@ -24,25 +24,25 @@ function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full">
-      {/* Background image grid */}
-      <div className="absolute inset-0 bg-black/40 z-10">
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-1 opacity-80">
+    <div className="relative min-h-screen w-full flex flex-col">
+      {/* Background image grid - only covers part of the screen to leave room for footer */}
+      <div className="absolute inset-0 bottom-16 bg-black/40 z-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 h-full">
           {images.length > 0 ? (
-            // Use actual images from media folder
+            // Use actual images from media folder - exactly 10 images
             images.map((image, index) => (
               <div 
                 key={index} 
-                className="aspect-[3/4] bg-cover bg-center" 
+                className="bg-cover bg-center h-full" 
                 style={{ backgroundImage: `url(${image})` }}
               />
             ))
           ) : (
-            // Fallback while images are loading
+            // Fallback while images are loading - exactly 10 placeholders
             Array(10).fill().map((_, i) => (
               <div 
                 key={i} 
-                className="aspect-[3/4] bg-gray-300"
+                className="bg-gray-300 h-full"
               />
             ))
           )}
@@ -50,11 +50,11 @@ function LandingPage() {
       </div>
 
       {/* Content overlay */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen text-white px-4">
+      <div className="relative z-20 flex flex-col items-center justify-center flex-grow text-white px-4">
         {/* Enhanced title with gradient and glow */}
         <div className="relative mb-12 group">
-          <h1 className="text-6xl md:text-8xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 drop-shadow-lg">
-            Swipe Home<span className="text-blue-400">®</span>
+          <h1 className="text-6xl md:text-8xl font-bold text-blue-400 text-center bg-clip-text drop-shadow-lg">
+            Home <span className="text-blue-400">Swipe</span> Home
           </h1>
           <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-500/20 rounded-lg blur-xl opacity-30 -z-10"></div>
         </div>
@@ -77,6 +77,21 @@ function LandingPage() {
           </Link>
         </div>
       </div>
+      
+      {/* Footer */}
+      <footer className="relative z-20 bg-gray-900 text-gray-400 py-4 px-6 w-full">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
+          <div className="mb-2 md:mb-0">
+            © 2023 HomeSwipe. All rights reserved.
+          </div>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-white transition-colors">Contact</a>
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+            <a href="#" className="hover:text-white transition-colors">Help</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
