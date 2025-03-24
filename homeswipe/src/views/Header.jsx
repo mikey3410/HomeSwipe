@@ -1,28 +1,41 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { HomeIcon } from "@heroicons/react/24/solid"; // Import Heroicons
+import { Link } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
 
-export default function Navbar() {
+function Header() {
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="flex justify-between items-center px-6 py-4">
-        
-        {/* Left: Home Icon + HomeSwipe */}
-        <Link to="/" className="flex items-center space-x-2 text-black font-bold text-xl">
-          <HomeIcon className="h-6 w-6 text-blue-600" /> {/* House Icon */}
-          <span>HomeSwipe</span>
+    <header className="bg-white shadow- py-4 px-6">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo and brand name with link to landing page */}
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="relative">
+            <FaHome className="text-3xl text-gray-800 group-hover:text-gray-900 transition-colors z-10 relative" />
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-400 rounded-lg blur opacity-30 group-hover:opacity-70 transition duration-300"></div>
+          </div>
+          <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 group-hover:from-gray-900 group-hover:to-gray-700 transition-all duration-300 drop-shadow-sm">
+            Home<span className="text-blue-400 group-hover:text-blue-400">Swipe</span>
+          </span>
         </Link>
-
-        {/* Right: Login & Signup Buttons */}
-        <div className="flex space-x-4">
-          <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">
-            Log In
-          </Link>
-          <Link to="/signup" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-            Sign Up
+        
+        {/* Navigation links */}
+        <nav className="hidden md:flex items-center gap-6">
+          <a href="#" className="text-gray-600 hover:text-gray-900">Homes</a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">Learn</a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">Safety</a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">Help</a>
+        </nav>
+        
+        {/* Auth buttons */}
+        <div className="flex items-center gap-4">
+          <Link to="/login" className="group relative inline-flex items-center justify-center">
+            <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-400 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-300"></span>
+            <span className="relative bg-white hover:bg-gray-50 text-gray-800 font-semibold py-2 px-6 border border-gray-300 rounded-full shadow-sm transition-all duration-300 group-hover:shadow-md">
+              Log in
+            </span>
           </Link>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
+
+export default Header;
