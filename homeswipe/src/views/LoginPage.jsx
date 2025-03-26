@@ -4,13 +4,17 @@ import {
 } from "firebase/auth";
 import FullPageLoader from '../components/FullpageLoader.jsx';
 import React, { useState } from 'react';
-import { auth } from "../firebase/config.js"
+import { useNavigate } from 'react-router-dom'; // <-- IMPORT useNavigate
+import { auth } from "../firebase/config.js";
 
 function LoginPage() {
     const [isLoading, setLoading] = useState(false);
     const [loginType, setLoginType] = useState('login');
     const [userCreds, setUserCreds] = useState({});
     const [error, setError] = useState('');
+
+    // Initialize useNavigate INSIDE your component:
+    const navigate = useNavigate();
 
     function handleCreds(e) {
         setUserCreds({ ...userCreds, [e.target.name]: e.target.value });
@@ -24,6 +28,8 @@ function LoginPage() {
             .then((userCredential) => {
                 console.log(userCredential.user);
                 setLoading(false);
+                // If you want to navigate after signup:
+                // navigate('/swipe');
             })
             .catch((error) => {
                 setError(error.message);
@@ -36,13 +42,11 @@ function LoginPage() {
         signInWithEmailAndPassword(auth, userCreds.email, userCreds.password)
             .then((userCredential) => {
                 console.log(userCredential.user);
-                // Signed in 
-                const user = userCredential.user;
-                // ...
+                // On successful login, redirect:
+                navigate('/swipe');
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                setError(error.message);
             });
     }
 
@@ -58,18 +62,27 @@ function LoginPage() {
                     {/* Login/Signup Toggle */}
                     <div className="flex justify-center space-x-4 mb-6">
                         <button
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${loginType === 'login' ? 'bg-blue-600 text-white' : 'bg-transparent border border-black text-black'
-                                }`}
-                            onClick={() => setLoginType('login')}>
+                            className={`px-4 py-2 rounded-lg font-semibold transition ${
+                                loginType === 'login'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-transparent border border-black text-black'
+                            }`}
+                            onClick={() => setLoginType('login')}
+                        >
                             Login
                         </button>
                         <button
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${loginType === 'signup' ? 'bg-green-600 text-white' : 'bg-transparent border border-black text-black'
-                                }`}
-                            onClick={() => setLoginType('signup')}>
+                            className={`px-4 py-2 rounded-lg font-semibold transition ${
+                                loginType === 'signup'
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-transparent border border-black text-black'
+                            }`}
+                            onClick={() => setLoginType('signup')}
+                        >
                             Sign Up
                         </button>
                     </div>
+
                     {/* Form Inputs */}
                     <form className="space-y-4">
                         <div>
@@ -103,11 +116,17 @@ function LoginPage() {
 
                         {/* Action Buttons */}
                         {loginType === 'login' ? (
-                            <button onClick={handleLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
+                            <button
+                                onClick={handleLogin}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition"
+                            >
                                 Login
                             </button>
                         ) : (
-                            <button onClick={handleSignup} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition">
+                            <button
+                                onClick={handleSignup}
+                                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition"
+                            >
                                 Sign Up
                             </button>
                         )}

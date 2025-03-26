@@ -1,3 +1,4 @@
+//app.js
 import React from "react";
 import "./App.css";
 import LoginPage from "./views/LoginPage"; // Import your LoginPage component
