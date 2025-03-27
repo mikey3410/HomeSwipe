@@ -3,22 +3,9 @@ import React from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VillaIcon from '@mui/icons-material/Villa';
 
+// Keeps layout spacing, removes the black nav bar
 function NavBar() {
-  return (
-    <nav style={styles.navBar}>
-      <div style={styles.navBarInner}>
-        <div style={styles.left}>
-          <VillaIcon />
-        </div>
-        <div style={styles.center}>
-          <h2 style={styles.logo}>HomeSwipe</h2>
-        </div>
-        <div style={styles.right}>
-          <AccountCircleIcon />
-        </div>
-      </div>
-    </nav>
-  );
+  return <div style={{ height: '60px' }}></div>;
 }
 
 const styles = {
@@ -28,9 +15,10 @@ const styles = {
     left: 0,
     right: 0,
     height: '60px',
-    background: 'linear-gradient(to bottom, rgba(48, 48, 48, 1) 0%, rgba(0, 0, 0, 1) 100%)', // Dark gray to black
-    color: '#fff',
+    background: 'linear-gradient(to right, #ece6f5, #f5f2ff)', // soft purple-blue gradient
+    color: '#080808',
     zIndex: 999,
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', // soft shadow
   },
   navBarInner: {
     // Constrain and center the nav content
