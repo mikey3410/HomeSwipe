@@ -1,13 +1,14 @@
-/* Main App background (light gray) */
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
   box-sizing: border-box;
-  padding-top: 60px;
-  background-color: #ffffff;
+  padding-top: 10px; /* adjust depending on your navbar height */
+  background: linear-gradient(to bottom right, #f7f4fc, #ffffff);
   text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: #333;
 }
 
 /* White rounded container */
@@ -25,14 +26,14 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Main content area */
 .mainContent {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  justify-content: flex-start; /* was center */
+  padding: 1rem 2rem 0 2rem; /* top right bottom left */
+  gap: 1.5rem; /* adds nice spacing between card and buttons */
 }
 
 .cardContainer {
@@ -66,39 +67,51 @@
   transform: scale(1.01);
 }
 
-/* Footer styles */
 .footerBackground {
   width: 100%;
-  background-color: #070707f4;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-  padding: 0.5rem 0;
-  border-radius: 20px;
+  background: linear-gradient(to right, #ece6f5, #f5f2ff); /* your soft purple-blue */
+  border-radius: 2rem 2rem 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.2rem 0;
+  margin-top: 1rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 .footerContainer {
-  max-width: 1200px;
+  max-width: 500px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .footerContainer button {
-  width: 7rem;
-  height: 7rem;
-  margin: 0 0.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: white;
+  border-radius: 1rem;
   border: none;
-  background-color: #ffffff;
-  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
   cursor: pointer;
-  color: #080808;
 }
 
-.footerContainer button .MuiSvgIcon-root {
-  font-size: 3.2rem;
+.footerContainer button:hover {
+  background-color: #e0e7ff; /* soft blue */
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.footerContainer button:active {
+  transform: scale(0.95);
+  background-color: #c7d2fe;
+}
 .editLocation {
   display: flex;
   text-decoration: underline;

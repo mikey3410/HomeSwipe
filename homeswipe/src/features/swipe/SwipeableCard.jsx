@@ -77,11 +77,28 @@ const SwipeableCard = forwardRef(({ card, onSwipe, style = {} }, ref) => {
         <ShareLocationIcon style={styles.icon} />
       </button>
 
-      {/* Overlay text */}
-      <div className="cardOverlay">
-        <h3>{card.name}</h3>
-        <p>{card.price}</p>
-      </div>
+      <div
+  className="cardOverlay"
+  style={{
+    position: 'absolute',
+    top: '15px',
+    right: '15px',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    color: '#fff',
+    padding: '10px 16px',
+    borderRadius: '12px',
+    fontSize: '1.3rem',
+    fontWeight: '600',
+    fontFamily: 'system-ui, sans-serif',
+    whiteSpace: 'nowrap',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+    minWidth: '150px',
+    textAlign: 'center',
+  }}
+>
+  {card.price ? `${card.price.toLocaleString?.() || card.price}` : 'N/A'}
+</div>
+
 
       {/* Expanded info */}
       {expanded && (
