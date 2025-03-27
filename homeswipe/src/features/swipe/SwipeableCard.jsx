@@ -78,8 +78,8 @@ const SwipeableCard = forwardRef(({ card, onSwipe, style = {} }, ref) => {
       </button>
 
       <div
-  className="cardOverlay"
-  style={{
+    className="cardOverlay"
+    style={{
     position: 'absolute',
     top: '15px',
     right: '15px',
@@ -96,8 +96,25 @@ const SwipeableCard = forwardRef(({ card, onSwipe, style = {} }, ref) => {
     textAlign: 'center',
   }}
 >
-  {card.price ? `${card.price.toLocaleString?.() || card.price}` : 'N/A'}
-</div>
+  <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+  {card.price ? `$${Number(card.price).toLocaleString()}` : 'N/A'}
+  </p>
+  </div>
+
+{/* Info overlay at bottom of card */}
+  <div style={{
+  position: 'absolute',
+  bottom: '1rem',
+  left: '1rem',
+  color: '#fff',
+  background: 'rgba(0, 0, 0, 0.6)',
+  borderRadius: '12px',
+  padding: '0.5rem 1rem',
+  fontSize: '1rem',
+  fontWeight: '500'
+}}>
+  🛏 {card.bedrooms || 'N/A'} Beds • 🛁 {card.bathrooms || 'N/A'} Baths
+  </div>
 
 
       {/* Expanded info */}

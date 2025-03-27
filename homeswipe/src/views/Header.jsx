@@ -1,10 +1,36 @@
-//Header.jsx
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { auth } from '../firebase/config';
 import { FaHome } from 'react-icons/fa';
 
 function Header() {
+  const [user, setUser] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Listen for login state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Auth state changed:", currentUser);
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      console.log("Logging out...");
+      await signOut(auth);
+      console.log("Successfully logged out");
+      navigate('/'); // optional
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   return (
-    <header className="bg-white shadow- py-4 px-6">
+    <header className="bg-white shadow py-4 px-6">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo and brand name with link to landing page */}
         <Link to="/" className="flex items-center gap-2 group">
@@ -16,23 +42,34 @@ function Header() {
             Home<span className="text-blue-400 group-hover:text-blue-400">Swipe</span>
           </span>
         </Link>
-        
+
         {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-6">
           <a href="#" className="text-gray-600 hover:text-gray-900">Homes</a>
           <Link to="/learn" className="text-gray-600 hover:text-gray-900">Learn</Link>
           <a href="#" className="text-gray-600 hover:text-gray-900">Help</a>
         </nav>
-        
-        {/* Auth buttons */}
-        <div className="flex items-center gap-4">
-          <Link to="/login" className="group relative inline-flex items-center justify-center">
-            <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-400 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-300"></span>
-            <span className="relative bg-white hover:bg-gray-50 text-gray-800 font-semibold py-2 px-6 border border-gray-300 rounded-full shadow-sm transition-all duration-300 group-hover:shadow-md">
-              Log in
-            </span>
-          </Link>
-        </div>
+
+        {/* Auth Buttons (conditional & hidden on landing page) */}
+        {location.pathname !== '/' && (
+          <div className="flex items-center gap-4">
+            {!user ? (
+              <Link to="/login" className="group relative inline-flex items-center justify-center">
+                <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-400 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-300"></span>
+                <span className="relative bg-white hover:bg-gray-50 text-gray-800 font-semibold py-2 px-6 border border-gray-300 rounded-full shadow-sm transition-all duration-300 group-hover:shadow-md">
+                  Log in
+                </span>
+              </Link>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white font-semibold py-2 px-6 rounded-full shadow-sm hover:bg-red-600 transition-all duration-300"
+              >
+                Log out
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

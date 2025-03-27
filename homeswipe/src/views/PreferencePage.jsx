@@ -23,19 +23,25 @@ function PreferencesPage() {
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
-  //   try {
-  //     const homes = await fetchFilteredHomes(preferences);
-  //     console.log("Filtered homes:", homes);
+  //   const results = await fetchListings(preferences);
+  //   console.log(results); // TEMP: see what comes back
   
-  //     // send to swipe page with listings
-  //     navigate('/swipe', { state: { listings: homes, filters: preferences } });
-  //   } catch (error) {
-  //     console.error("Failed to fetch listings", error);
-  //   }
+  //   // Redirect to swipe page with listings
+  //   navigate('/swipe', { state: { listings: results } });
   // };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const results = await fetchListings(preferences);
+  
+    // Parse numeric values properly
+    const parsedPreferences = {
+      ...preferences,
+      minPrice: preferences.minPrice ? parseInt(preferences.minPrice) : undefined,
+      maxPrice: preferences.maxPrice ? parseInt(preferences.maxPrice) : undefined,
+      bedrooms: preferences.bedrooms ? parseInt(preferences.bedrooms) : undefined,
+      bathrooms: preferences.bathrooms ? parseInt(preferences.bathrooms) : undefined,
+    };
+  
+    const results = await fetchListings(parsedPreferences);
     console.log(results); // TEMP: see what comes back
   
     // Redirect to swipe page with listings
