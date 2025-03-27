@@ -2,55 +2,52 @@
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;  
+  min-height: 100vh;
   margin: 0;
   box-sizing: border-box;
-
-  /* Because the NavBar is fixed at top, 
-     add top padding so content isn't hidden behind it */
-  padding-top: 60px; 
-  background-color: rgb(255, 255, 255);
+  padding-top: 60px;
+  background-color: #ffffff;
   text-align: center;
 }
 
-/* The white container that occupies remaining space */
+/* White rounded container */
 .contentContainer {
-  flex: 1; /* fill vertical space */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* mainContent at top, footer at bottom */
-  align-items: center;           /* center horizontally if desired */
-  max-width: 1200px;            /* your chosen max width */
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background-color: #f7f2f2ed;  /*  UI Color  */
+  background-color: #f7f2f2ed;
   border-radius: 0px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Main content area: grows to push footer down */
+/* Main content area */
 .mainContent {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* centers the main content vertically if there's space */
+  justify-content: center;
   padding: 2rem;
 }
 
-/* Container for the swipeable cards */
 .cardContainer {
   position: relative;
-  width: 900px;   /* or 600px, if you prefer */
-  height: 1000px;  /* reduce if you want no scrolling on smaller screens */
-  margin: 1rem auto;
+  width: 400px;
+  height: 550px;
+  margin: 2rem auto;
 }
 
-/* Individual card styling */
 .card {
   position: absolute;
-  width: 900px;
-  height: 1000px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
   background-size: cover;
   background-position: center;
@@ -61,22 +58,25 @@
   box-sizing: border-box;
   user-select: none;
   cursor: grab;
+  transition: transform 0.2s ease;
 }
 
-/* Footer background container to match the white content area */
+/* Optional hover effect for depth */
+.card:hover {
+  transform: scale(1.01);
+}
+
+/* Footer styles */
 .footerBackground {
   width: 100%;
-  /* This matches the .contentContainer’s background and border radius if desired */
   background-color: #070707f4;
-  border-radius: 0 0 10px 10px; /* So the bottom corners match */
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* optional top shadow for separation */
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 0;
   border-radius: 20px;
 }
 
-/* Actual footer content (buttons) */
 .footerContainer {
-  max-width: 1200px;
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -85,22 +85,21 @@
 }
 
 .footerContainer button {
-  width: 7rem; /* Fixed width */
-  height: 7rem; /* Fixed height, same as width for a circle */
+  width: 7rem;
+  height: 7rem;
   margin: 0 0.5rem;
-  padding: 0; /* Remove extra padding */
   border: none;
   background-color: #ffffff;
-  border-radius: 50%; /* This makes the button circular */
+  border-radius: 50%;
   cursor: pointer;
   color: #080808;
 }
 
 .footerContainer button .MuiSvgIcon-root {
-  font-size: 3.2rem; /* adjust as needed */
+  font-size: 3.2rem;
 }
 
-.editLocation{
+.editLocation {
   display: flex;
   text-decoration: underline;
   padding-top: 1rem;
@@ -110,6 +109,7 @@
   font-family: '-apple-system, BlinkMacSystemFont, sans-serif';
 }
 
+/* Card details (visible on swipe up) */
 .cardDetails {
   background: rgba(255, 255, 255, 0.9);
   width: 100%;

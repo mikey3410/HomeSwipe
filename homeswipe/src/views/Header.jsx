@@ -20,8 +20,7 @@ function Header() {
         {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-6">
           <a href="#" className="text-gray-600 hover:text-gray-900">Homes</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">Learn</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">Safety</a>
+          <Link to="/learn" className="text-gray-600 hover:text-gray-900">Learn</Link>
           <a href="#" className="text-gray-600 hover:text-gray-900">Help</a>
         </nav>
         

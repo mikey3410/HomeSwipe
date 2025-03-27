@@ -4,15 +4,31 @@ import NavBar from './Navbar';
 import SwipeButtons from './SwipeButtons';
 import SwipeableCard from './SwipeableCard';
 import './SwipeFeature.css';
-import cardsData from './cardData';
-
+import { useLocation } from 'react-router-dom';
 
 import EditLocationIcon from '@mui/icons-material/EditLocation';
 import UndoIcon from '@mui/icons-material/Undo';
 import StarsIcon from '@mui/icons-material/Stars';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
-function App() {
+function SwipeFeatureComponent() {
+  const location = useLocation(); // ✅ useLocation moved inside the component
+  const listings = location.state?.listings || []; // ✅ you can use it here
+
+  const cardsData = listings.length > 0
+  ? listings.map(home => ({
+      name: home.address?.streetAddress || "Unknown",
+      img: home.imgSrc,
+      price: home.price,
+      bedrooms: home.bedrooms,
+      bathrooms: home.bathrooms,
+      zpid: home.zpid
+    }))
+  : [
+      { name: "Example Home 1", img: "url1", zpid: "1" },
+      { name: "Example Home 2", img: "url2", zpid: "2" }
+    ];
+
   const [cards, setCards] = useState(cardsData);
   const [swipedCards, setSwipedCards] = useState([]);
   const cardRef = useRef(null);
@@ -20,32 +36,26 @@ function App() {
   const handleSwipe = (direction, card) => {
     console.log(`Swiped ${direction} on ${card.name}`);
     setSwipedCards((prev) => [...prev, card]);
-    setCards((prevCards) => prevCards.filter((c) => c.name !== card.name));
+    setCards((prevCards) => prevCards.filter((c) => c.zpid !== card.zpid));
   };
 
   const handleLike = () => {
-    console.log('Like button clicked!');
     if (cardRef.current) {
       cardRef.current.swipe('right');
     }
   };
 
   const handleDislike = () => {
-    console.log('Dislike button clicked!');
     if (cardRef.current) {
       cardRef.current.swipe('left');
     }
   };
 
-  // Restore the last swiped card
   const handlePrevious = () => {
     if (swipedCards.length > 0) {
       const lastCard = swipedCards[swipedCards.length - 1];
-      console.log(`Previous House clicked: restoring ${lastCard.name}`);
       setSwipedCards((prev) => prev.slice(0, prev.length - 1));
       setCards((prev) => [...prev, lastCard]);
-    } else {
-      console.log('No previous card to restore');
     }
   };
 
@@ -60,38 +70,29 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-
-      {/* The main white container */}
       <div className="contentContainer">
-          <div className='editLocation'>
-
-            <EditLocationIcon/>
-            <h1>Las Cruces, NM</h1>            
-          </div>        
-        {/* Main content area */}
+        <div className='editLocation'>
+          <EditLocationIcon/>
+          <h1>Las Cruces, NM</h1>
+        </div>        
         <div className="mainContent">
-
-
           <div className="cardContainer">
-          
-            {cards.map((card, index) => {
-              const isTopCard = index === cards.length - 1;
-              const ref = isTopCard ? cardRef : null;
-              return (
-                <SwipeableCard
-                  key={card.name}
-                  ref={ref}
-                  card={card}
-                  onSwipe={handleSwipe}
-                />
-              );
-            })}
+          {cards.map((card, index) => {
+          const isTopCard = index === cards.length - 1;
+          const ref = isTopCard ? cardRef : null;
+          return (
+            <SwipeableCard
+           key={card.zpid || index}
+           ref={ref}
+           card={card}
+           onSwipe={handleSwipe}
+           style={{ zIndex: index }}
+         />
+        );
+      })}
           </div>
-
           <SwipeButtons onLike={handleLike} onDislike={handleDislike} />
         </div>
-
-        {/* Footer pinned at the bottom of the container */}
         <div className='footerBackground'>
           <div className="footerContainer">
             <button onClick={handlePrevious}><UndoIcon/></button>
@@ -104,4 +105,4 @@ function App() {
   );
 }
 
-export default App;
+export default SwipeFeatureComponent;
