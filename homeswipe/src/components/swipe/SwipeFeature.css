@@ -38,8 +38,8 @@
 
 .cardContainer {
   position: relative;
-  width: 400px;
-  height: 550px;
+  width: 550px;
+  height: 600px;
   margin: 2rem auto;
 }
 
@@ -52,7 +52,7 @@
   border-radius: 20px;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: flex-end;
   padding: 20px;

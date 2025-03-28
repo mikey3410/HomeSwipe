@@ -6,7 +6,7 @@ import Header from './views/Header.jsx'
 import LoginPage from './views/LoginPage.jsx'
 import LandingPage from './views/LandingPage.jsx'
 import Home from './views/Home.jsx'
-import SwipeFeature from './features/swipe/SwipeFeature.jsx';  // Import the swipe feature
+import SwipeFeature from './components/swipe/SwipeFeature.jsx';  // Import the swipe feature
 import PreferencePage from './views/PreferencePage';
 import LearnPage from './views/LearnPage.jsx';
 
