@@ -27,7 +27,8 @@ function SwipeFeatureComponent() {
   price: home.unformattedPrice,
   bedrooms: home.beds,
   bathrooms: home.baths,
-  area: home.area, // optional
+  area: home.area, 
+  fullAddress: `${home.addressStreet}, ${home.addressCity}, ${home.addressState} ${home.addressZipcode}`,
   zpid: home.providerListingId || home.zpid || `${home.addressStreet}-${Math.random()}`
 })) : [
   { name: "Example Home 1", img: "url1", zpid: "1" },

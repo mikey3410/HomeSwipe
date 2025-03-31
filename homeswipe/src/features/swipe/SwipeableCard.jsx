@@ -98,6 +98,7 @@ const SwipeableCard = forwardRef(({ card, onSwipe, style = {} }, ref) => {
 >
   <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
   {card.price ? `$${Number(card.price).toLocaleString()}` : 'N/A'}
+  <p className="text-white text-sm mt-1">{card.fullAddress}</p>
   </p>
   </div>
 
