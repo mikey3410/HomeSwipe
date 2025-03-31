@@ -1,0 +1,133 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
+  padding-top: 10px; /* adjust depending on your navbar height */
+  background: linear-gradient(to bottom right, #f7f4fc, #ffffff);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+}
+
+/* White rounded container */
+.contentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #f7f2f2ed;
+  border-radius: 0px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* was center */
+  padding: 1rem 2rem 0 2rem; /* top right bottom left */
+  gap: 1.5rem; /* adds nice spacing between card and buttons */
+}
+
+.cardContainer {
+  position: relative;
+  width: 400px;
+  height: 550px;
+  margin: 2rem auto;
+}
+
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+/* Optional hover effect for depth */
+.card:hover {
+  transform: scale(1.01);
+}
+
+.footerBackground {
+  width: 100%;
+  background: linear-gradient(to right, #ece6f5, #f5f2ff); /* your soft purple-blue */
+  border-radius: 2rem 2rem 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.2rem 0;
+  margin-top: 1rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.footerContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.footerContainer button {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: white;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.footerContainer button:hover {
+  background-color: #e0e7ff; /* soft blue */
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.footerContainer button:active {
+  transform: scale(0.95);
+  background-color: #c7d2fe;
+}
+.editLocation {
+  display: flex;
+  text-decoration: underline;
+  padding-top: 1rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #080808;
+  font-family: '-apple-system, BlinkMacSystemFont, sans-serif';
+}
+
+/* Card details (visible on swipe up) */
+.cardDetails {
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+  margin-top: 1rem;
+  border-radius: 0 0 20px 20px;
+}
