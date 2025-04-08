@@ -1,36 +1,23 @@
-//zillowbase.js
+//src/api/zillowbase.js
 import axios from 'axios';
 
-const API_KEY = 'abb7cde94amsh5085c0eca0f92b6p19c0d8jsn2e1a4f0a457a'; // actual key
-
 export async function fetchListings(preferences) {
-  const options = {
-    method: 'GET',
-    url: 'https://zillow-base1.p.rapidapi.com/WebAPIs/zillow/search',
-
-    params: Object.fromEntries(
-      Object.entries({
-        location: `${preferences.city}, ${preferences.state}`,
-        page: '1',
-        status_type: 'ForSale',
-        sort_by: 'Homes_For_You',
-        min_price: preferences.minPrice,
-        max_price: preferences.maxPrice,
-        min_beds: preferences.bedrooms,
-        min_baths: preferences.bathrooms,
-      }).filter(([_, value]) => value !== '' && value !== undefined)
-    ),
-    headers: {
-      'x-rapidapi-key': API_KEY,
-      'x-rapidapi-host': 'zillow-base1.p.rapidapi.com'
-    }
-  };
+  // Build query parameters using the provided preferences.
+  const queryParams = new URLSearchParams({
+    city: preferences.city,
+    state: preferences.state,
+    minPrice: preferences.minPrice,
+    maxPrice: preferences.maxPrice,
+    bedrooms: preferences.bedrooms,
+    bathrooms: preferences.bathrooms
+  });
 
   try {
-    const response = await axios.request(options);
-    return response.data?.searchResultsData || [];
+    // Call backend endpoint 
+    const response = await axios.get(`http://localhost:5001/api/zillow/homes?${queryParams.toString()}`);
+    return response.data;
   } catch (error) {
-    console.error('Failed to fetch listings:', error);
+    console.error('Failed to fetch listings from backend:', error);
     return [];
   }
 }
