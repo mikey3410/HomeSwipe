@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
-import { fetchListings } from '/Users/rypl/Projects/School/final_sem/SeniorProject/HomeSwipe/homeswipe/src/api/zillowbase.js';
+import { fetchListings } from '/Users/davery/Documents/GitHub/HomeSwipe/homeswipe/src/api/zillowbase.js';
 import NavBar from './Navbar';
 import SwipeButtons from './SwipeButtons';
 import SwipeableCard from './SwipeableCard';
@@ -61,6 +61,7 @@ function SwipeFeatureComponent() {
           bedrooms: home.beds || 0,
           bathrooms: home.baths || 0,
           area: home.area || 0,
+          fullAddress: `${home.addressStreet}, ${home.addressCity}, ${home.addressState} ${home.addressZipcode}`,
           zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`
         }));
         setCards(transformed);
