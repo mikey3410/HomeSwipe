@@ -62,11 +62,12 @@ function Header() {
               </Link>
             ) : (
               <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white font-semibold py-2 px-6 rounded-full shadow-sm hover:bg-red-600 transition-all duration-300"
-              >
-                Log out
-              </button>
+              onClick={handleLogout}
+              className="relative group inline-flex items-center justify-center"
+            >
+              <span className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-400 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-300"></span>
+              <span className="relative bg-white rounded-full py-2 px-6 shadow-sm transition-all duration-300 group-hover:shadow-sm">Log out</span>
+            </button> 
             )}
           </div>
         )}
