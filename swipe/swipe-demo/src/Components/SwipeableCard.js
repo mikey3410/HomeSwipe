@@ -1,4 +1,3 @@
-//SwipeableCard.js
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
