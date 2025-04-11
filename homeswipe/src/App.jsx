@@ -9,6 +9,8 @@ import Home from './views/Home.jsx'
 import SwipeFeature from './features/swipe/SwipeFeature.jsx';  // Import the swipe feature
 import PreferencePage from './views/PreferencePage';
 import LearnPage from './views/LearnPage.jsx';
+import LikedHomes from './views/LikedHomes';
+import DislikedHomes from './views/DislikedHomes';
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
           <Route path="/preferences" element={<PreferencePage />} />
           <Route path="/swipe" element={<SwipeFeature />} />
           <Route path="/learn" element={<LearnPage />} />
+          <Route path="/liked" element={<LikedHomes />} />
+          <Route path="/disliked" element={<DislikedHomes />} />
         </Routes>
       </div>
     </Router>
