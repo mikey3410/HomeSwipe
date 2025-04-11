@@ -1,3 +1,4 @@
+// SwipeButtons.jsx
 import React, { useState } from 'react';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -13,7 +14,7 @@ function SwipeButtons({ onLike, onDislike }) {
       <button
         style={{
           ...styles.button,
-          ...(hoveredBtn === 'dislike' ? styles.hovered : {}),
+          ...(hoveredBtn === 'dislike' ? styles.hoveredDislike : {}),
         }}
         onClick={onDislike}
         onMouseEnter={() => handleMouseEnter('dislike')}
@@ -25,7 +26,7 @@ function SwipeButtons({ onLike, onDislike }) {
       <button
         style={{
           ...styles.button,
-          ...(hoveredBtn === 'like' ? styles.hovered : {}),
+          ...(hoveredBtn === 'like' ? styles.hoveredLike : {}),
         }}
         onClick={onLike}
         onMouseEnter={() => handleMouseEnter('like')}
@@ -56,13 +57,16 @@ const styles = {
     border: 'none',
     transition: 'all 0.3s ease',
   },
-  hovered: {
-    background: '#4255ff', // lighter hover color
+  hoveredLike: {
+    boxShadow: '0 0 20px 5px rgba(0,255,0,0.5)', // green glow
     transform: 'scale(1.05)',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+  },
+  hoveredDislike: {
+    boxShadow: '0 0 20px 5px rgba(255,0,0,0.5)', // red glow
+    transform: 'scale(1.05)',
   },
   icon: {
-    fontSize: '1.5rem',
+    fontSize: '2rem',
     color: 'white',
   },
 };

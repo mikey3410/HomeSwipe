@@ -88,25 +88,6 @@ const monthlyPayment = expandedCard
     }
   }
 
-  const fetchLikedHomes = async (userId) => {
-    const q = query(
-      collection(db, "swipes"),
-      where("userId", "==", userId),
-      where("action", "==", "like")
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => doc.data().homeId);
-  };
-  
-  const fetchDislikedHomes = async (userId) => {
-    const q = query(
-      collection(db, "swipes"),
-      where("userId", "==", userId),
-      where("action", "==", "dislike")
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => doc.data().homeId);
-  };
 
   // Load listings from router state or sessionStorage
   useEffect(() => {
@@ -179,15 +160,26 @@ const monthlyPayment = expandedCard
     }
   };
 
-  const handleLike = async () => {
+// for the like buttons
+  const handleLike = () => {
+    if (cardRef.current) {
+      cardRef.current.swipe('right');
+    }
+  };
+  
+  const handleDislike = () => {
+    if (cardRef.current) {
+      cardRef.current.swipe('left');
+    }
+  };
+
+  const goToLikedHomes = async () => {
     const likedHomes = await fetchSwipedHomes(currentUserId, 'like');
-    console.log("Liked homes:", likedHomes);
     navigate('/liked', { state: { homes: likedHomes } });
   };
   
-  const handleDislike = async () => {
+  const goToDislikedHomes = async () => {
     const dislikedHomes = await fetchSwipedHomes(currentUserId, 'dislike');
-    console.log("Disliked homes:", dislikedHomes);
     navigate('/disliked', { state: { homes: dislikedHomes } });
   };
 
@@ -228,13 +220,21 @@ const monthlyPayment = expandedCard
           </div>
           <SwipeButtons onLike={handleLike} onDislike={handleDislike} />
         </div>
+
+        
         <div className="footerBackground">
           <div className="footerContainer">
-            <button onClick={handlePrevious}><UndoIcon /></button>
-            <button onClick={handleLike}><StarsIcon /></button>
-            <button onClick={handleDislike}><NotInterestedIcon /></button>
-          </div>
-        </div>
+          <button onClick={handlePrevious}>
+  <UndoIcon />
+  </button>
+  <button onClick={goToLikedHomes}>
+  <StarsIcon />
+  </button>
+  <button onClick={goToDislikedHomes}>
+  <NotInterestedIcon />
+  </button>
+      </div>
+      </div>
       </div>
 
   {expandedCard && (

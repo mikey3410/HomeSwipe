@@ -5,13 +5,12 @@
   margin: 0;
   box-sizing: border-box;
   padding-top: 10px; /* adjust depending on your navbar height */
-  background: linear-gradient(to bottom right, #f7f4fc, #ffffff);
+  background: linear-gradient(to bottom right, #e0e7ff, #fef3f3, #fdf6ff);
   text-align: center;
   font-family: 'Inter', sans-serif;
   color: #333;
 }
 
-/* White rounded container */
 .contentContainer {
   flex: 1;
   display: flex;
@@ -21,9 +20,14 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background-color: #f7f2f2ed;
-  border-radius: 0px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
+  box-shadow: 0 0 25px rgba(165, 120, 255, 0.5), 0 0 40px rgba(165, 120, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(165, 120, 255, 0.3); /* subtle border */
+  transition: all 0.3s ease;
 }
 
 .mainContent {

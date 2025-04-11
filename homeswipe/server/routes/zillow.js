@@ -1,6 +1,8 @@
 // server/routes/zillow.js
 const express = require('express');
 const router = express.Router();
+
+
 const axios = require('axios');
 const { db } = require('../firebase/firebase');
 
@@ -38,9 +40,10 @@ router.get('/homes', async (req, res) => {
       status_type: 'ForSale',
       sort_by: 'Homes_For_You',
       min_price: req.query.minPrice,
-      max_price: req.query.maxPrice,
+      //max_price: req.query.maxPrice,
       min_beds: req.query.bedrooms,
       min_baths: req.query.bathrooms,
+      max_price: req.query.maxPrice || req.query.max_price,
     };
 
     // Remove keys with falsy values
@@ -51,6 +54,8 @@ router.get('/homes', async (req, res) => {
     });
 
     console.log("RapidAPI request params:", params);
+
+   
 
     // Fetch data from the Zillow Base API via RapidAPI
     const response = await axios.request({

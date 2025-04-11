@@ -1,4 +1,5 @@
 //src/api/zillowbase.js
+
 import axios from 'axios';
 
 export async function fetchListings(preferences) {
@@ -7,9 +8,9 @@ export async function fetchListings(preferences) {
     city: preferences.city,
     state: preferences.state,
     minPrice: preferences.minPrice,
-    maxPrice: preferences.maxPrice,
     bedrooms: preferences.bedrooms,
-    bathrooms: preferences.bathrooms
+    bathrooms: preferences.bathrooms,
+    maxPrice: preferences.maxPrice,
   });
 
   try {
