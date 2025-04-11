@@ -41,29 +41,32 @@ const styles = {
   container: {
     display: 'flex',
     justifyContent: 'center',
-    gap: '20rem',
-    marginTop: '2.5rem',
+    gap: '5rem',
+    flexWrap: 'wrap',
+    marginTop: '2rem',
   },
   button: {
-    width: '7rem',
-    height: '7rem',
+    width: '4.5rem',
+    height: '4.5rem',
     borderRadius: '50%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
-    background: 'rgba(7, 46, 218, 0.84)',
-    border: 'none',
+    background: 'white',
+    border: '2px solid #d1d5db',
     transition: 'all 0.3s ease',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
   },
   hovered: {
-    background: '#4255ff', // lighter hover color
-    transform: 'scale(1.05)',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+    transform: 'scale(1.1)',
+    borderColor: '#6b5bff',
+    background: '#eef2ff',
+    boxShadow: '0 6px 16px rgba(107, 91, 255, 0.2)',
   },
   icon: {
-    fontSize: '1.5rem',
-    color: 'white',
+    fontSize: '2rem',
+    color: '#6b5bff',
   },
 };
 

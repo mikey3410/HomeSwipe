@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-
+// Import a static placeholder image - adjust the path as needed
+import placeholderImage from '../../media/wiktor-karkocha-WA2uSCbTXkI-unsplash.jpg'
 
 function LandingPage() {
   const [images, setImages] = useState([]);
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
 
   useEffect(() => {
     const importAllImages = async () => {
@@ -13,6 +15,11 @@ function LandingPage() {
         const imagePromises = Object.values(imageFiles).map(importFile => importFile());
         const loadedImages = await Promise.all(imagePromises);
         setImages(loadedImages.map(module => module.default).slice(0, 10));
+        
+        // Wait for 250ms before transitioning
+        setTimeout(() => {
+          setShowPlaceholder(false);
+        }, 250);
       } catch (error) {
         console.error("Error loading images:", error);
       }
@@ -23,25 +30,32 @@ function LandingPage() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col">
-      {/* Background image grid */}
-      <div className="absolute inset-0 bottom-16 bg-black/40 z-10">
+      {/* Static placeholder */}
+      <div 
+        className={`absolute inset-0 bottom-16 bg-black/40 z-10 transition-opacity duration-300 ${
+          showPlaceholder ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div 
+          className="h-full w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${placeholderImage})` }}
+        />
+      </div>
+
+      {/* Dynamic image grid */}
+      <div 
+        className={`absolute inset-0 bottom-16 bg-black/40 z-10 transition-opacity duration-300 ${
+          showPlaceholder ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         <div className="grid grid-cols-2 md:grid-cols-5 h-full">
-          {images.length > 0 ? (
-            images.map((image, index) => (
-              <div 
-                key={index} 
-                className="bg-cover bg-center h-full" 
-                style={{ backgroundImage: `url(${image})` }}
-              />
-            ))
-          ) : (
-            Array(10).fill().map((_, i) => (
-              <div 
-                key={i} 
-                className="bg-gray-300 h-full"
-              />
-            ))
-          )}
+          {images.map((image, index) => (
+            <div 
+              key={index} 
+              className="bg-cover bg-center h-full" 
+              style={{ backgroundImage: `url(${image})` }}
+            />
+          ))}
         </div>
       </div>
 
@@ -76,31 +90,6 @@ function LandingPage() {
           </Link>
         </div>
       </div>
-
-      <div id="learn" className="bg-white text-gray-800 py-20 px-6 sm:px-12 lg:px-32 text-center">
-  <h2 className="text-4xl font-extrabold mb-4">🏡 Why Choose HomeSwipe?</h2>
-  <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
-    HomeSwipe isn’t just another home search tool — it’s a personalized, fun, and smart experience 
-    designed to make finding your dream home effortless. With intuitive swiping, customizable filters, 
-    and instant connections to listings, HomeSwipe gives you the tools to search the way you want.
-  </p>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-    <div>
-      <h3 className="text-xl font-bold text-purple-600 mb-2">🔍 Personalized Filters</h3>
-      <p className="text-gray-600">Set your exact preferences — from location and price to home type and amenities.</p>
-    </div>
-    <div>
-      <h3 className="text-xl font-bold text-purple-600 mb-2">📱 Swipe to Like or Skip</h3>
-      <p className="text-gray-600">Engage with homes in a fun, familiar way. It’s like dating, but for real estate.</p>
-    </div>
-    <div>
-      <h3 className="text-xl font-bold text-purple-600 mb-2">🚀 Instant Results</h3>
-      <p className="text-gray-600">See real listings that match you instantly. No fluff. No filler. Just what you want.</p>
-    </div>
-  </div>
-</div>
-
 
       {/* Footer */}
       <footer className="relative z-20 bg-gray-900 text-gray-400 py-4 px-6 w-full">

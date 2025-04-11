@@ -1,0 +1,67 @@
+/* ImageCarousel.css */
+/* Styled buttons for navigation */
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-button:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.carousel-button.prev {
+  left: 10px;
+}
+
+.carousel-button.next {
+  right: 10px;
+}
+
+.carousel-button::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #333;
+  border-left: 2px solid #333;
+}
+
+.carousel-button.prev::before {
+  transform: rotate(-45deg);
+  margin-left: 3px;
+}
+
+.carousel-button.next::before {
+  transform: rotate(135deg);
+  margin-right: 3px;
+}
+
+/* Image counter styling */
+.image-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  z-index: 5;
+}
+
+/* Add fade transition effect to the card's background */
+.card {
+  transition: background-image 0.5s ease-in-out;
+}

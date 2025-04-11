@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
-import { fetchListings } from '/Users/rypl/Projects/School/final_sem/SeniorProject/HomeSwipe/homeswipe/src/api/zillowbase.js';
+import { fetchListings } from './../../api/zillowbase.js'; // Adjust the import path as necessary
 import NavBar from './Navbar';
 import SwipeButtons from './SwipeButtons';
 import SwipeableCard from './SwipeableCard';
@@ -49,20 +49,30 @@ function SwipeFeatureComponent() {
           listings = JSON.parse(stored);
         }
       }
+
       // If listings exist, transform them into card format
       if (listings && listings.length > 0) {
-        const transformed = listings.map(home => ({
-          name: home.addressStreet || 'Unknown',
-          city: home.addressCity || '',
-          state: home.addressState || '',
-          zip: home.addressZipcode || '',
-          img: home.imgSrc || 'https://via.placeholder.com/400x300',
-          price: home.unformattedPrice || 0,
-          bedrooms: home.beds || 0,
-          bathrooms: home.baths || 0,
-          area: home.area || 0,
-          zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`
-        }));
+        const transformed = listings.map(home => {
+          // Extract URLs from carouselPhotos
+          const images = Array.isArray(home.carouselPhotos) && home.carouselPhotos.length > 0
+            ? home.carouselPhotos.map(photo => photo.url) // Extract the `url` property
+            :  home.imgSrc; // Fallback image
+
+          return {
+            name: home.addressStreet || 'Unknown',
+            city: home.addressCity || '',
+            state: home.addressState || '',
+            zip: home.addressZipcode || '',
+            images,
+            currentImageIndex: 0, // Initialize currentImageIndex
+            price: home.unformattedPrice || 0,
+            bedrooms: home.beds || 0,
+            bathrooms: home.baths || 0,
+            area: home.area || 0,
+            zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`
+          };
+        });
+
         setCards(transformed);
         console.log('Transformed cards:', transformed);
       } else {
@@ -113,6 +123,43 @@ function SwipeFeatureComponent() {
     console.log('Disliked Homes button clicked!');
   };
 
+  const handleNextImage = (cardId, currentImageIndex) => {
+    setCards(prevCards =>
+      prevCards.map(card => {
+        // If this card isn't the one we're updating, just return it immediately
+        if (card.zpid !== cardId) return card;
+
+        // ✅ This is the card we want to update
+        const newIndex = (card.currentImageIndex + 1) % card.images.length;
+        console.log(`Next image clicked for card: ${cardId}`);
+        console.log(`Updated currentImageIndex for card ${cardId}:`, newIndex);
+
+        return {
+          ...card,
+          currentImageIndex: newIndex,
+        };
+      })
+    );
+  };
+
+  const handlePrevImage = (cardId, currentImageIndex) => {
+    setCards(prevCards =>
+      prevCards.map(card => {
+        if (card.zpid !== cardId) return card;
+
+        const newIndex = (card.currentImageIndex - 1 + card.images.length) % card.images.length;
+        console.log(`Previous image clicked for card: ${cardId}`);
+        console.log(`Updated currentImageIndex for card ${cardId}:`, newIndex);
+
+        return {
+          ...card,
+          currentImageIndex: newIndex,
+        };
+      })
+    );
+  };
+
+
   return (
     <div className="App">
       <NavBar />
@@ -131,10 +178,12 @@ function SwipeFeatureComponent() {
               const isTopCard = index === cards.length - 1;
               return (
                 <SwipeableCard
-                  key={`${card.zpid}-${index}`}
+                  key={card.zpid}
                   ref={isTopCard ? cardRef : null}
                   card={card}
                   onSwipe={handleSwipe}
+                  onNextImage={handleNextImage}
+                  onPrevImage={handlePrevImage}
                   style={{ zIndex: index }}
                 />
               );

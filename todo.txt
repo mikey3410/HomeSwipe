@@ -1,6 +1,4 @@
-re request homes when the shit is out lol xd.
+request homes when the shit is out lol xd.
 add image buttons to click through images. 
 add swipe up feature to see more details. 
 add package-lock.json file to gitignore
-
-hello
