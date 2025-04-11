@@ -63,9 +63,10 @@ function Header() {
             ) : (
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white font-semibold py-2 px-6 rounded-full shadow-sm hover:bg-red-600 transition-all duration-300"
+                className="relative group font-semibold py-2 px-6 rounded-full bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]"
               >
-                Log out
+                <span className="absolute -inset-[2px] rounded-full bg-gradient-to-r from-purple-600 to-blue-400 -z-10"></span>
+                <span className="relative z-10 text-black group-hover:text-white transition-colors duration-300">Log out</span>
               </button>
             )}
           </div>
