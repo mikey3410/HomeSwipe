@@ -21,14 +21,6 @@ function PreferencesPage() {
     setPreferences({ ...preferences, [e.target.name]: e.target.value });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const results = await fetchListings(preferences);
-  //   console.log(results); // TEMP: see what comes back
-  
-  //   // Redirect to swipe page with listings
-  //   navigate('/swipe', { state: { listings: results } });
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
   

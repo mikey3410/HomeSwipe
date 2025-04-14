@@ -46,6 +46,24 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, ani
     };
     img.src = currentImageUrl;
   }, [card.currentImageIndex, images]);
+  const handleLocationClick = () => {
+    console.log(`Location clicked for ${card.name}`);
+    // Optional: open map using card.lat/lng if you have it
+  };
+
+  const handleDragEnd = (event, info) => {
+    if (info.offset.x > 150) {
+      animate(x, 1000, { duration: 0.5 }).then(() => onSwipe('right', card));
+    } else if (info.offset.x < -150) {
+      animate(x, -1000, { duration: 0.5 }).then(() => onSwipe('left', card));
+    } else if (info.offset.y < -150) {
+      animate(y, -300, { duration: 0.5 });
+      if (onExpand) onExpand(card); // Trigger parent bottom sheet
+    } else {
+      animate(x, 0, { duration: 0.3 });
+      animate(y, 0, { duration: 0.3 });
+    }
+  };
 
   return (
     <motion.div

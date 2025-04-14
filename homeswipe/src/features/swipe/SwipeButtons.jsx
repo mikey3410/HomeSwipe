@@ -1,3 +1,4 @@
+// SwipeButtons.jsx
 import React, { useState } from 'react';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -13,7 +14,7 @@ function SwipeButtons({ onLike, onDislike }) {
       <button
         style={{
           ...styles.button,
-          ...(hoveredBtn === 'dislike' ? styles.hovered : {}),
+          ...(hoveredBtn === 'dislike' ? styles.hoveredDislike : {}),
         }}
         onClick={onDislike}
         onMouseEnter={() => handleMouseEnter('dislike')}
@@ -25,7 +26,7 @@ function SwipeButtons({ onLike, onDislike }) {
       <button
         style={{
           ...styles.button,
-          ...(hoveredBtn === 'like' ? styles.hovered : {}),
+          ...(hoveredBtn === 'like' ? styles.hoveredLike : {}),
         }}
         onClick={onLike}
         onMouseEnter={() => handleMouseEnter('like')}
