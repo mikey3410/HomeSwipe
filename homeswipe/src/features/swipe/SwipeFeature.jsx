@@ -126,10 +126,8 @@ function SwipeFeatureComponent() {
   const handleNextImage = (cardId, currentImageIndex) => {
     setCards(prevCards =>
       prevCards.map(card => {
-        // If this card isn't the one we're updating, just return it immediately
         if (card.zpid !== cardId) return card;
 
-        // ✅ This is the card we want to update
         const newIndex = (card.currentImageIndex + 1) % card.images.length;
         console.log(`Next image clicked for card: ${cardId}`);
         console.log(`Updated currentImageIndex for card ${cardId}:`, newIndex);
@@ -137,6 +135,7 @@ function SwipeFeatureComponent() {
         return {
           ...card,
           currentImageIndex: newIndex,
+          animationDirection: 1, // Set direction for next
         };
       })
     );
@@ -154,6 +153,7 @@ function SwipeFeatureComponent() {
         return {
           ...card,
           currentImageIndex: newIndex,
+          animationDirection: -1, // Set direction for previous
         };
       })
     );
@@ -184,7 +184,8 @@ function SwipeFeatureComponent() {
                   onSwipe={handleSwipe}
                   onNextImage={handleNextImage}
                   onPrevImage={handlePrevImage}
-                  style={{ zIndex: index }}
+                  style={{ zIndex: cards.length - index }}
+                  animationDirection={card.animationDirection || 0} // Pass direction, default 0
                 />
               );
             })}

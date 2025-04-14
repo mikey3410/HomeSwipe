@@ -1,8 +1,25 @@
 import React, { forwardRef, memo, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './ImageCarousel.css';
 
-const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, style = {} }, ref) => {
+const variants = {
+  enter: (direction) => ({
+    x: direction > 0 ? '100%' : '-100%',
+    opacity: 0
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1
+  },
+  exit: (direction) => ({
+    zIndex: 0,
+    x: direction < 0 ? '100%' : '-100%',
+    opacity: 0
+  })
+};
+
+const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, animationDirection, style = {} }, ref) => {
   // Ensure images is always an array
   const images = Array.isArray(card.images) ? card.images : [card.images];
   
@@ -10,12 +27,9 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, sty
   const [displayedImageUrl, setDisplayedImageUrl] = useState('');
   // Track if the next image is loaded
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Update displayed image when currentImageIndex changes
+
   useEffect(() => {
     setIsLoading(true);
-    
-    // Get the current image URL
     const currentImageUrl = typeof images[card.currentImageIndex] === 'string'
       ? images[card.currentImageIndex]
       : images[card.currentImageIndex]?.url || '';
@@ -39,15 +53,12 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, sty
       className="card"
       style={{
         ...style,
-        backgroundImage: `url(${displayedImageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        borderRadius: '1rem',
         position: 'absolute',
         width: '100%',
         height: '100%',
-        opacity: isLoading ? 0.7 : 1, // Slight opacity during loading
-        transition: 'background-image 0.5s ease-in-out, opacity 0.3s ease-in-out',
+        borderRadius: '1rem',
+        overflow: 'hidden', // Add this to prevent content from showing outside the card
+        backgroundColor: '#f0f0f0',
       }}
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
@@ -57,6 +68,33 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onNextImage, onPrevImage, sty
         else if (info.offset.x < -150) onSwipe('left', card);
       }}
     >
+      <AnimatePresence initial={false} custom={animationDirection}>
+        <motion.div
+          key={card.currentImageIndex} // Use index as key for stability
+          className="card-image-container"
+          custom={animationDirection}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "tween", duration: 0.3, ease: "easeInOut" },
+            opacity: { duration: 0.2 }
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: `url(${displayedImageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            // Opacity is handled by variants now
+          }}
+        />
+      </AnimatePresence>
+
       {/* Navigation Buttons */}
       {images.length > 1 && (
         <>
