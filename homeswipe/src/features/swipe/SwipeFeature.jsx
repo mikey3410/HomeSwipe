@@ -117,7 +117,14 @@ function SwipeFeatureComponent() {
     <div className="App">
       <NavBar />
       <div className="contentContainer">
-        <div className="editLocation" onClick={() => navigate('/preferences')} style={{ cursor: 'pointer' }}>
+        <div 
+          className="editLocation" 
+          data-testid="edit-location" 
+          role="button"
+          tabIndex="0"
+          onClick={() => navigate('/preferences')} 
+          style={{ cursor: 'pointer' }}>
+
           <EditLocationIcon />
           <h1>
             {cards.length > 0 && cards[0].city && cards[0].state
