@@ -87,7 +87,18 @@ function SwipeFeatureComponent() {
             bedrooms: home.beds || 0,
             bathrooms: home.baths || 0,
             area: home.area || 0,
-            zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`
+            zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`,
+
+             // 🆕 Extra fields for detail panel
+            lotAreaValue: home.hdpData?.homeInfo?.lotAreaValue || null,
+            lotAreaUnit: home.hdpData?.homeInfo?.lotAreaUnit || null,
+            daysOnZillow: home.hdpData?.homeInfo?.daysOnZillow ?? null,
+            brokerName: home.brokerName || null,
+            latitude: home.latitude,
+            longitude: home.longitude,
+            yearBuilt: home.hdpData?.homeInfo?.yearBuilt || null,
+            homeType: home.hdpData?.homeInfo?.homeType || null,
+            listingSubType: home.hdpData?.homeInfo?.listing_sub_type || null,
           };
         });
 
@@ -100,17 +111,6 @@ function SwipeFeatureComponent() {
     }
     loadListings();
   }, [location.state]);
-
-  // Handle swipe action and record it in the backend
-  const handleSwipe = (direction, card) => {
-    console.log(`Swiped ${direction} on ${card.name}`);
-    // Determine swipe action: right = "like", left = "dislike"
-    const action = direction === 'right' ? 'like' : 'dislike';
-    // Record the swipe action with the actual user ID from Firebase Auth
-    recordSwipe(currentUserId, card.zpid, action);
-    // Update local state to remove the swiped card
-    setSwipedCards(prev => [...prev, card]);
-    setCards(prev => prev.filter(c => c.zpid !== card.zpid));
 
   // swipe up feature expander
   const [expandedCard, setExpandedCard] = useState(null);
@@ -125,9 +125,9 @@ function SwipeFeatureComponent() {
       setExpandedCard(null);
       motionY.set(300); // Reset for next time
     });
-};
+  };
 
-const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(6.5);
   const [loanTermYears, setLoanTermYears] = useState(30);
 
@@ -136,15 +136,15 @@ const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const monthlyRate = interestRate / 100 / 12;
   const numPayments = loanTermYears * 12;
   return (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
-};
+  };
 
 const monthlyPayment = expandedCard
   ? calculateMonthlyMortgage(expandedCard.unformattedPrice || expandedCard.price || 0).toFixed(2)
   : '0.00';
-  // Retrieve current user from Firebase Auth
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
-  const currentUserId = currentUser ? currentUser.uid : 'unknown';
+  // // Retrieve current user from Firebase Auth
+  // const auth = getAuth();
+  // const currentUser = auth.currentUser;
+  // const currentUserId = currentUser ? currentUser.uid : 'unknown';
 
   // Helper function to record a swipe to the backend
   async function recordSwipe(userId, homeId, action) {
@@ -158,59 +158,7 @@ const monthlyPayment = expandedCard
     } catch (error) {
       console.error('Error recording swipe:', error);
     }
-  }
-
-
-  // Load listings from router state or sessionStorage
-  useEffect(() => {
-    async function loadListings() {
-      let listings = location.state?.listings;
-      if (!listings) {
-        const stored = sessionStorage.getItem('listings');
-        if (stored) {
-          listings = JSON.parse(stored);
-        }
-      }
-      // If listings exist, transform them into card format
-      if (listings && listings.length > 0) {
-        const transformed = listings.map(home => {
-          console.log('Zillow home keys:', Object.keys(home));
-          console.log('Zillow full object:', JSON.stringify(home, null, 2));   // SHOWS info needed
-        
-          return {
-            name: home.addressStreet || 'Unknown',
-            city: home.addressCity || '',
-            state: home.addressState || '',
-            zip: home.addressZipcode || '',
-            img: home.imgSrc || 'https://via.placeholder.com/400x300',
-            price: home.unformattedPrice || 0,
-            bedrooms: home.beds || 0,
-            bathrooms: home.baths || 0,
-            area: home.area || 0,
-            fullAddress: `${home.addressStreet}, ${home.addressCity}, ${home.addressState} ${home.addressZipcode}`,
-            zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`,
-        
-            // 🆕 Extra fields for detail panel
-            lotAreaValue: home.hdpData?.homeInfo?.lotAreaValue || null,
-            lotAreaUnit: home.hdpData?.homeInfo?.lotAreaUnit || null,
-            daysOnZillow: home.hdpData?.homeInfo?.daysOnZillow ?? null,
-            brokerName: home.brokerName || null,
-            latitude: home.latitude,
-            longitude: home.longitude,
-            yearBuilt: home.hdpData?.homeInfo?.yearBuilt || null,
-            homeType: home.hdpData?.homeInfo?.homeType || null,
-            listingSubType: home.hdpData?.homeInfo?.listing_sub_type || null,
-          };
-        });
-        setCards(transformed);
-        console.log('Transformed cards:', transformed);
-      } else {
-        setCards([]);
-        console.log('No listings found in router state or sessionStorage');
-      }
-    }
-    loadListings();
-  }, [location.state]);
+  };
 
   // Handle swipe action and record it in the backend
   const handleSwipe = (direction, card) => {
@@ -322,6 +270,8 @@ const monthlyPayment = expandedCard
                   onSwipe={handleSwipe}
                   onNextImage={handleNextImage}
                   onPrevImage={handlePrevImage}
+                  onExpand={handleExpand}
+                  motionY = {motionY}
                   style={{ zIndex: cards.length - index }}
                   animationDirection={card.animationDirection || 0} // Pass direction, default 0
                 />
@@ -458,6 +408,6 @@ const monthlyPayment = expandedCard
 )}
     </div>
   );
-  }
 }
+
 export default SwipeFeatureComponent;
