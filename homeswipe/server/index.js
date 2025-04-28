@@ -14,13 +14,14 @@ app.use(express.json());
 const healthRoutes = require('./routes/health');
 const zillowRoutes = require('./routes/zillow');
 const swipeRoutes  = require('./routes/swipe');
-// Optionally: const recommendationsRoutes = require('./routes/recommendations');
+const recommender = require('./routes/recommender')
+
 
 // Mount routes
 app.use('/api/health', healthRoutes);
 app.use('/api/zillow', zillowRoutes);
-app.use('/api/swipe', swipeRoutes);
-// Optionally: app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/swipe', swipeRoutes)
+app.use('/api/recommender', recommender);
 
 // Global error handler
 app.use((err, req, res, next) => {
