@@ -21,7 +21,8 @@ function LikedHomes() {
         where('action', '==', 'like')
       );
       const snapshot = await getDocs(q);
-      const homeIds = snapshot.docs.map(doc => doc.data().homeId);
+      const homeIds = [...new Set(snapshot.docs.map(doc => doc.data().homeId))];
+
 
       if (homeIds.length > 0) {
         const fetchedHomes = [];

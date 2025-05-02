@@ -91,7 +91,10 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, style = {} }, ref) 
           whiteSpace: 'nowrap',
           boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
           minWidth: '150px',
-          textAlign: 'center'
+          overflow: 'hidden', 
+          textAlign: 'center',
+          textOverflow: 'ellipsis',
+          maxWidth: '70%'
         }}
       >
         <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
