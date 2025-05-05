@@ -10,7 +10,7 @@ import './SwipeFeature.css';
 import { motion } from 'framer-motion';
 import { useMotionValue, useTransform, animate } from 'framer-motion';
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/config"; // ✅ just two levels up
+import { db } from "../../firebase/config"; //  just two levels up
 
 import EditLocationIcon from '@mui/icons-material/EditLocation';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -89,7 +89,7 @@ function SwipeFeatureComponent() {
             area: home.area || 0,
             zpid: home.providerListingId || home.zpid || `${home.addressStreet || 'unknown'}-${Math.random()}`,
 
-             // 🆕 Extra fields for detail panel
+             //  Extra fields for detail panel
             lotAreaValue: home.hdpData?.homeInfo?.lotAreaValue || null,
             lotAreaUnit: home.hdpData?.homeInfo?.lotAreaUnit || null,
             daysOnZillow: home.hdpData?.homeInfo?.daysOnZillow ?? null,
@@ -331,18 +331,18 @@ const monthlyPayment = expandedCard
     <div className="text-center space-y-1">
       <h3 className="text-lg font-semibold">🏠 Property Details</h3>
       <div className="flex justify-center flex-wrap gap-6 text-sm mt-2">
-        <div>🛏 {expandedCard.bedrooms ?? 'N/A'} Beds</div>
-        <div>🛁 {expandedCard.bathrooms ?? 'N/A'} Baths</div>
-        <div>📐 {expandedCard.area || 'N/A'} sqft</div>
+        <div>{expandedCard.bedrooms ?? 'N/A'} Beds</div>
+        <div>{expandedCard.bathrooms ?? 'N/A'} Baths</div>
+        <div> {expandedCard.area || 'N/A'} sqft</div>
         {expandedCard.lotAreaValue && (
-          <div>🌳 Lot: {expandedCard.lotAreaValue} {expandedCard.lotAreaUnit}</div>
+          <div> Lot: {expandedCard.lotAreaValue} {expandedCard.lotAreaUnit}</div>
         )}
         {expandedCard.homeType && (
-          <div>📦 Type: {expandedCard.homeType}</div>
+          <div> Type: {expandedCard.homeType}</div>
         )}
         {expandedCard.listingSubType && (
           <div>
-            🧾 Listing:
+             Listing:
             {expandedCard.listingSubType.is_FSBA && ' For Sale by Agent'}
             {expandedCard.listingSubType.is_newHome && ' • New Construction'}
             {expandedCard.listingSubType.is_openHouse && ' • Open House'}
@@ -355,12 +355,12 @@ const monthlyPayment = expandedCard
 
     {/* Listing Info */}
     <div className="text-center space-y-1">
-      <h3 className="text-lg font-semibold">📋 Listing Info</h3>
+      <h3 className="text-lg font-semibold">Listing Info</h3>
       {expandedCard.daysOnZillow != null && (
-        <p className="text-sm">📅 Days on Market: {expandedCard.daysOnZillow}</p>
+        <p className="text-sm">Days on Market: {expandedCard.daysOnZillow}</p>
       )}
       {expandedCard.brokerName && (
-        <p className="text-sm">🔑 Broker: {expandedCard.brokerName}</p>
+        <p className="text-sm"> Broker: {expandedCard.brokerName}</p>
       )}
     </div>
 
@@ -368,7 +368,7 @@ const monthlyPayment = expandedCard
 
     {/* Mortgage Calculator */}
     <div className="text-center space-y-2">
-      <h3 className="text-lg font-semibold">💰 Estimated Mortgage</h3>
+      <h3 className="text-lg font-semibold"> Estimated Mortgage</h3>
       <p className="mb-2 text-lg font-medium text-green-700">
         📆 ${monthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}/month (est.)
       </p>

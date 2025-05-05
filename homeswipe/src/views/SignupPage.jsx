@@ -28,6 +28,19 @@ function SignupPage() {
       });
   }
 
+  function handleGoogleSignup() {
+    const provider = new GoogleAuthProvider();
+    setLoading(true);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result.user);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }
 
   return (
     <>
@@ -89,6 +102,17 @@ function SignupPage() {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
+          {/* Google Sign Up Button */}
+          <div className="flex justify-center mt-2">
+            <button
+              onClick={handleGoogleSignup}
+              type="button"
+              className="flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg shadow hover:shadow-md transition"
+              aria-label="Sign up with Google"
+            >
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo" className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
     </>

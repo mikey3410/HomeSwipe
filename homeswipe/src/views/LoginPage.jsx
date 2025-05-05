@@ -3,7 +3,8 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    GithubAuthProvider
   } from "firebase/auth";
   import FullPageLoader from '../components/FullpageLoader.jsx';
   import React, { useState } from 'react';
@@ -49,6 +50,21 @@ import {
   
     function handleGoogleSignup() {
       const provider = new GoogleAuthProvider();
+      setLoading(true);
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log(result.user);
+          setLoading(false);
+          navigate('/preferences');
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLoading(false);
+        });
+    }
+  
+    function handleGithubSignup() {
+      const provider = new GithubAuthProvider();
       setLoading(true);
       signInWithPopup(auth, provider)
         .then((result) => {
@@ -144,13 +160,32 @@ import {
             </div>
   
             {/* Google Sign In/Up Button */}
-            <button
-              onClick={handleGoogleSignup}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg transition"
-              type="button"
-            >
-              Continue with Google
-            </button>
+            <div className="flex justify-center mt-2 space-x-3">
+              <button
+                onClick={handleGoogleSignup}
+                type="button"
+                className="flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg shadow hover:shadow-md transition"
+                aria-label="Sign in with Google"
+              >
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google logo"
+                  className="w-6 h-6"
+                />
+              </button>
+              <button
+                onClick={handleGithubSignup}
+                type="button"
+                className="flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg shadow hover:shadow-md transition"
+                aria-label="Sign in with GitHub"
+              >
+                <img
+                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  alt="GitHub logo"
+                  className="w-6 h-6"
+                />
+              </button>
+            </div>
           </div>
         </div>
       </>
