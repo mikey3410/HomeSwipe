@@ -1,7 +1,9 @@
 // src/views/LoginPage.jsx
 import {
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup
   } from "firebase/auth";
   import FullPageLoader from '../components/FullpageLoader.jsx';
   import React, { useState } from 'react';
@@ -42,6 +44,21 @@ import {
         })
         .catch((error) => {
           setError(error.message);
+        });
+    }
+  
+    function handleGoogleSignup() {
+      const provider = new GoogleAuthProvider();
+      setLoading(true);
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log(result.user);
+          setLoading(false);
+          navigate('/preferences');
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLoading(false);
         });
     }
   
@@ -117,9 +134,23 @@ import {
                   Sign Up
                 </button>
               )}
-  
-        
             </form>
+  
+            {/* Separator */}
+            <div className="my-4 flex items-center">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-2 text-gray-400">or</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+  
+            {/* Google Sign In/Up Button */}
+            <button
+              onClick={handleGoogleSignup}
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg transition"
+              type="button"
+            >
+              Continue with Google
+            </button>
           </div>
         </div>
       </>

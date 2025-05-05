@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import FullPageLoader from "../components/FullpageLoader.jsx";
 import React, { useState } from "react";
 import { auth } from "../firebase/config.js";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 function SignupPage() {
   const [isLoading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ function SignupPage() {
         setLoading(false);
       });
   }
+
 
   return (
     <>
@@ -75,11 +77,18 @@ function SignupPage() {
             <button
               onClick={handleSignup}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition"
-
             >
               Sign Up
             </button>
           </form>
+
+          {/* Separator */}
+          <div className="my-4 flex items-center">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <span className="mx-2 text-gray-400">or</span>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
+
         </div>
       </div>
     </>

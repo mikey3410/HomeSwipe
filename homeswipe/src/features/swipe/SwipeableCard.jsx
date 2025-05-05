@@ -2,7 +2,23 @@
 import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
+import Modal from '@mui/material/Modal';
+import RoomIcon from '@mui/icons-material/Room';
 import './ImageCarousel.css';
+
+const MAPS_API_KEY = "AIzaSyDJECvM3jb_FcjFVBSRKHkdxCJgeimdPHY";
+
+const mapContainerStyle = {
+  width: '75vw',
+  height: '75vh',
+  borderRadius: '20px',
+  overflow: 'hidden',
+  margin: 'auto',
+  marginTop: '5vh',
+  boxShadow: '0 4px 32px rgba(0,0,0,0.3)',
+  position: 'relative',
+  background: '#fff'
+};
 
 const variants = {
   enter: (direction) => ({
@@ -25,6 +41,7 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotate = useTransform(x, [-200, 0, 200], [-20, 0, 20]);
+  const [mapOpen, setMapOpen] = useState(false);
 
   const images = Array.isArray(card.images) ? card.images : [card.images];
   const [displayedImageUrl, setDisplayedImageUrl] = useState('');
@@ -58,9 +75,12 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
     img.src = currentImageUrl;
   }, [card.currentImageIndex, images]);
 
-  const handleLocationClick = () => {
-    console.log(`Location clicked for ${card.name}`);
+  const handleLocationClick = (e) => {
+    e.stopPropagation();
+    setMapOpen(true);
   };
+
+  const handleCloseMap = () => setMapOpen(false);
 
   const handleDragEnd = (event, info) => {
     if (info.offset.x > 150) {
@@ -76,159 +96,237 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
     }
   };
 
+  // For now, show a Google Map centered on the house's address
+  const address = encodeURIComponent(
+    card.fullAddress ||
+    `${card.name || ''}, ${card.city || ''}, ${card.state || ''} ${card.zip || ''}`
+  );
+  const mapUrl = `https://maps.google.com/maps?q=${address}&z=15&ie=UTF8&iwloc=&output=embed`;
+
   return (
-    <motion.div
-      className="card"
-      style={{
-        x,
-        y,
-        rotate,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        borderRadius: '1rem',
-        overflow: 'hidden',
-        backgroundColor: '#f0f0f0',
-        ...style
-      }}
-      drag
-      dragDirectionLock
-      dragConstraints={{ left: 0, right: 0, top: -300, bottom: 0 }}
-      dragElastic={1}
-      onDragEnd={handleDragEnd}
-    >
-      <AnimatePresence initial={false} custom={animationDirection}>
-        <motion.div
-          key={card.currentImageIndex}
-          className="card-image-container"
-          custom={animationDirection}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: 'tween', duration: 0.3, ease: 'easeInOut' },
-            opacity: { duration: 0.2 }
-          }}
+    <>
+      <Modal
+        open={mapOpen}
+        onClose={handleCloseMap}
+        aria-labelledby="map-modal-title"
+        aria-describedby="map-modal-description"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <div style={mapContainerStyle}>
+          <iframe
+            title="Google Map"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            style={{ border: 0, borderRadius: '20px' }}
+            src={mapUrl}
+            allowFullScreen
+          ></iframe>
+          <button
+            onClick={handleCloseMap}
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              background: '#fff',
+              border: 'none',
+              borderRadius: '50%',
+              width: 36,
+              height: 36,
+              fontSize: 22,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+            }}
+            aria-label="Close map"
+          >×</button>
+        </div>
+      </Modal>
+
+      <motion.div
+        className="card"
+        style={{
+          x,
+          y,
+          rotate,
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          borderRadius: '1rem',
+          overflow: 'hidden',
+          backgroundColor: '#f0f0f0',
+          ...style
+        }}
+        drag
+        dragDirectionLock
+        dragConstraints={{ left: 0, right: 0, top: -300, bottom: 0 }}
+        dragElastic={1}
+        onDragEnd={handleDragEnd}
+      >
+        <AnimatePresence initial={false} custom={animationDirection}>
+          <motion.div
+            key={card.currentImageIndex}
+            className="card-image-container"
+            custom={animationDirection}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: 'tween', duration: 0.3, ease: 'easeInOut' },
+              opacity: { duration: 0.2 }
+            }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url(${displayedImageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+        </AnimatePresence>
+
+        {images.length > 1 && (
+          <>
+            <button
+              className="carousel-button prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isLoading) onPrevImage(card.zpid, card.currentImageIndex);
+              }}
+              disabled={isLoading}
+              aria-label="Previous image"
+            ></button>
+            <button
+              className="carousel-button next"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isLoading) onNextImage(card.zpid, card.currentImageIndex);
+              }}
+              disabled={isLoading}
+              aria-label="Next image"
+            ></button>
+          </>
+        )}
+
+        {/* Persistent UI overlays below carousel */}
+        <div
           style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundImage: `url(${displayedImageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            bottom: '3.5rem',
+            left: '1rem',
+            color: '#fff',
+            background: 'rgba(0, 0, 0, 0.6)',
+            borderRadius: '12px',
+            padding: '0.5rem 1rem',
+            fontSize: '1rem',
+            fontWeight: '500',
+            zIndex: 2
           }}
-        />
-      </AnimatePresence>
-
-      {images.length > 1 && (
-        <>
-          <button
-            className="carousel-button prev"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!isLoading) onPrevImage(card.zpid, card.currentImageIndex);
-            }}
-            disabled={isLoading}
-            aria-label="Previous image"
-          ></button>
-          <button
-            className="carousel-button next"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!isLoading) onNextImage(card.zpid, card.currentImageIndex);
-            }}
-            disabled={isLoading}
-            aria-label="Next image"
-          ></button>
-        </>
-      )}
-
-      {/* Persistent UI overlays below carousel */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '3.5rem',
-          left: '1rem',
-          color: '#fff',
-          background: 'rgba(0, 0, 0, 0.6)',
-          borderRadius: '12px',
-          padding: '0.5rem 1rem',
-          fontSize: '1rem',
-          fontWeight: '500',
-          zIndex: 2
-        }}
-      >
-        🛏 {card.bedrooms || 'N/A'} Beds • 🛁 {card.bathrooms || 'N/A'} Baths
-      </div>
-
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '1rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: '#fff',
-          padding: '0.4rem 1rem',
-          borderRadius: '999px',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-          fontSize: '0.8rem',
-          color: '#444',
-          cursor: 'pointer',
-          zIndex: 2
-        }}
-      >
-        ⬆️ Swipe up for details
-      </div>
-
-      <div className="image-counter">
-        {images.length > 0
-          ? `${card.currentImageIndex + 1} / ${images.length}`
-          : 'No images'}
-      </div>
-
-      <button
-        onClick={handleLocationClick}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          zIndex: 2
-        }}
-      >
-        <ShareLocationIcon style={{ color: '#fff', fontSize: '2rem' }} />
-      </button>
-
-      <div
-        style={{
-          position: 'absolute',
-          top: '15px',
-          right: '15px',
-          backgroundColor: 'rgba(0, 0, 0, 0.85)',
-          color: '#fff',
-          padding: '10px 16px',
-          borderRadius: '12px',
-          fontSize: '1.3rem',
-          fontWeight: '600',
-          fontFamily: 'system-ui, sans-serif',
-          whiteSpace: 'nowrap',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-          minWidth: '150px',
-          textAlign: 'center',
-          zIndex: 2
-        }}
-      >
-        <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-          <p>{card.price ? `$${Number(card.price).toLocaleString()}` : 'N/A'}</p>
-          <p className="text-white text-sm mt-1">{card.fullAddress}</p>
+        >
+          🛏 {card.bedrooms || 'N/A'} Beds • {card.bathrooms || 'N/A'} Baths
         </div>
-      </div>
-    </motion.div>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '1rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: '#fff',
+            padding: '0.4rem 1rem',
+            borderRadius: '999px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            fontSize: '0.8rem',
+            color: '#444',
+            cursor: 'pointer',
+            zIndex: 2
+          }}
+        >
+        </div>
+
+        <div className="image-counter">
+          {images.length > 0
+            ? `${card.currentImageIndex + 1} / ${images.length}`
+            : 'No images'}
+        </div>
+
+        <button
+          onClick={handleLocationClick}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 2
+          }}
+        >
+          <ShareLocationIcon style={{ color: '#fff', fontSize: '2rem' }} />
+        </button>
+
+        {/* Top-right overlays: price and address in separate boxes */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '15px',
+            right: '15px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+            gap: '0.5rem',
+            zIndex: 2
+          }}
+        >
+          {/* Price box */}
+          <div
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              color: '#fff',
+              padding: '8px 18px',
+              borderRadius: '12px',
+              fontSize: '1.3rem',
+              fontWeight: 'bold',
+              fontFamily: 'system-ui, sans-serif',
+              minWidth: '120px',
+              textAlign: 'center',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+              maxWidth: '220px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {card.price ? `$${Number(card.price).toLocaleString()}` : 'N/A'}
+          </div>
+          {/* Address box */}
+          <div
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              color: '#fff',
+              padding: '7px 14px',
+              borderRadius: '10px',
+              fontSize: '0.95rem',
+              fontWeight: 500,
+              fontFamily: 'system-ui, sans-serif',
+              maxWidth: '220px',
+              minWidth: '120px',
+              textAlign: 'center',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
+              wordBreak: 'break-word',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'normal',
+            }}
+          >
+            {card.fullAddress || `${card.name || ''}, ${card.city || ''}, ${card.state || ''} ${card.zip || ''}`}
+          </div>
+        </div>
+      </motion.div>
+    </>
   );
 });
 
