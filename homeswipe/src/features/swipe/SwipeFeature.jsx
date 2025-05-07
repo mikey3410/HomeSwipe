@@ -61,6 +61,7 @@ function SwipeFeatureComponent() {
   useEffect(() => {
     async function loadListings() {
       let listings = location.state?.listings;
+
       if (!listings) {
         const stored = sessionStorage.getItem('listings');
         if (stored) {
@@ -68,13 +69,25 @@ function SwipeFeatureComponent() {
         }
       }
 
+      if (!listings) {
+        const preferences = {
+          city: location.state?.city || 'Las Cruces',
+          state: location.state?.state || 'NM',
+          minPrice: location.state?.minPrice || '',
+          maxPrice: location.state?.maxPrice || '',
+          bedrooms: location.state?.bedrooms || '',
+          bathrooms: location.state?.bathrooms || '',
+        };
+        listings = await fetchListings(preferences);
+        sessionStorage.setItem('listings', JSON.stringify(listings));
+      }
+
       // If listings exist, transform them into card format
       if (listings && listings.length > 0) {
         const transformed = listings.map(home => {
-          // Extract URLs from carouselPhotos
           const images = Array.isArray(home.carouselPhotos) && home.carouselPhotos.length > 0
-            ? home.carouselPhotos.map(photo => photo.url) // Extract the `url` property
-            :  home.imgSrc; // Fallback image
+            ? home.carouselPhotos.map(photo => photo.url)
+            : home.imgSrc;
 
           return {
             name: home.addressStreet || 'Unknown',
@@ -82,7 +95,7 @@ function SwipeFeatureComponent() {
             state: home.addressState || '',
             zip: home.addressZipcode || '',
             images,
-            currentImageIndex: 0, // Initialize currentImageIndex
+            currentImageIndex: 0,
             price: home.unformattedPrice || 0,
             bedrooms: home.beds || 0,
             bathrooms: home.baths || 0,
@@ -109,6 +122,7 @@ function SwipeFeatureComponent() {
         console.log('No listings found in router state or sessionStorage');
       }
     }
+
     loadListings();
   }, [location.state]);
 
@@ -132,41 +146,25 @@ function SwipeFeatureComponent() {
   const [loanTermYears, setLoanTermYears] = useState(30);
 
   const calculateMonthlyMortgage = (price) => {
-  const principal = price * (1 - downPaymentPercent / 100);
-  const monthlyRate = interestRate / 100 / 12;
-  const numPayments = loanTermYears * 12;
-  return (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
+    const principal = price * (1 - downPaymentPercent / 100);
+    const monthlyRate = interestRate / 100 / 12;
+    const numPayments = loanTermYears * 12;
+    return (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
   };
 
-const monthlyPayment = expandedCard
-  ? calculateMonthlyMortgage(expandedCard.unformattedPrice || expandedCard.price || 0).toFixed(2)
-  : '0.00';
-  // // Retrieve current user from Firebase Auth
-  // const auth = getAuth();
-  // const currentUser = auth.currentUser;
-  // const currentUserId = currentUser ? currentUser.uid : 'unknown';
-
-  // Helper function to record a swipe to the backend
-  async function recordSwipe(userId, homeId, action) {
-    try {
-      const response = await axios.post('http://localhost:5001/api/swipe', {
-        userId,
-        homeId,
-        action,
-      });
-      console.log('Swipe recorded:', response.data);
-    } catch (error) {
-      console.error('Error recording swipe:', error);
-    }
-  };
+  const monthlyPayment = expandedCard
+    ? calculateMonthlyMortgage(expandedCard.unformattedPrice || expandedCard.price || 0).toFixed(2)
+    : '0.00';
 
   // Handle swipe action and record it in the backend
   const handleSwipe = (direction, card) => {
     console.log(`Swiped ${direction} on ${card.name}`);
     // Determine swipe action: right = "like", left = "dislike"
     const action = direction === 'right' ? 'like' : 'dislike';
+    
     // Record the swipe action with the actual user ID from Firebase Auth
     recordSwipe(currentUserId, card.zpid, action);
+    
     // Update local state to remove the swiped card
     setSwipedCards(prev => [...prev, card]);
     setCards(prev => prev.filter(c => c.zpid !== card.zpid));
@@ -180,7 +178,6 @@ const monthlyPayment = expandedCard
     }
   };
 
-// for the like buttons
   const handleLike = () => {
     if (cardRef.current) {
       cardRef.current.swipe('right');
@@ -239,25 +236,24 @@ const monthlyPayment = expandedCard
     );
   };
 
-
   return (
     <div className="App">
       <NavBar />
       <div className="contentContainer">
-      <div className="flex justify-center mt-4">
-      <button
-      onClick={() => navigate('/preferences')}
-      className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-full shadow hover:bg-gray-100 transition"
-  >
-      <EditLocationIcon />
-      <span className="text-sm text-gray-700">
-      {cards.length > 0 && cards[0].city && cards[0].state
-        ? `${cards[0].city}, ${cards[0].state}`
-        : "Your Area"}
-    </span>
-    <span className="text-blue-600 underline text-sm">Change Location</span>
-  </button>
-    </div>
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => navigate('/preferences')}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-full shadow hover:bg-gray-100 transition"
+          >
+            <EditLocationIcon />
+            <span className="text-sm text-gray-700">
+              {cards.length > 0 && cards[0].city && cards[0].state
+                ? `${cards[0].city}, ${cards[0].state}`
+                : "Your Area"}
+            </span>
+            <span className="text-blue-600 underline text-sm">Change Location</span>
+          </button>
+        </div>
         <div className="mainContent">
           <div className="cardContainer">
             {cards.map((card, index) => {
@@ -278,54 +274,55 @@ const monthlyPayment = expandedCard
               );
             })}
           </div>
-          <SwipeButtons onLike={handleLike} onDislike={handleDislike} />
+          <div style={{ position: 'relative', zIndex: 100 }}>
+            <SwipeButtons onLike={handleLike} onDislike={handleDislike} />
+          </div>
         </div>
 
-        
-        <div className="footerBackground">
+        <div className="footerBackground" style={{ position: 'relative', zIndex: 100, backgroundColor: 'white' }}>
           <div className="footerContainer">
-          <button onClick={handlePrevious}>
-  <UndoIcon />
-  </button>
-  <button onClick={goToLikedHomes}>
-  <StarsIcon />
-  </button>
-  <button onClick={goToDislikedHomes}>
-  <NotInterestedIcon />
-  </button>
-      </div>
-      </div>
+            <button onClick={handlePrevious}>
+              <UndoIcon />
+            </button>
+            <button onClick={goToLikedHomes}>
+              <StarsIcon />
+            </button>
+            <button onClick={goToDislikedHomes}>
+              <NotInterestedIcon />
+            </button>
+          </div>
+        </div>
       </div>
 
-  {expandedCard && (
-  <motion.div
-    className="fixed bottom-0 left-0 right-0 max-h-[60vh] overflow-y-auto z-[1000] p-6 bg-white/80 backdrop-blur-md rounded-t-3xl shadow-2xl font-sans"
-    style={{ transform: translateY }}
-  >
-    <div className="text-right mb-2">
-      <button
-        onClick={closeExpanded}
-        className="text-xl bg-transparent border-none cursor-pointer"
-        aria-label="Close"
-      >
-        ✖️
-      </button>
-    </div>
+      {expandedCard && (
+        <motion.div
+          className="fixed bottom-0 left-0 right-0 max-h-[60vh] overflow-y-auto z-[1000] p-6 bg-white/80 backdrop-blur-md rounded-t-3xl shadow-2xl font-sans"
+          style={{ transform: translateY }}
+        >
+          <div className="text-right mb-2">
+            <button
+              onClick={closeExpanded}
+              className="text-xl bg-transparent border-none cursor-pointer"
+              aria-label="Close"
+            >
+              ✖️
+            </button>
+          </div>
 
-    <div className="text-center space-y-2">
-    <h2 className="text-2xl font-bold">
-  {expandedCard.unformattedPrice
-    ? `$${Number(expandedCard.unformattedPrice).toLocaleString()}`
-    : expandedCard.price
-    ? `$${Number(
-        String(expandedCard.price).replace(/[^0-9.-]+/g, '')
-      ).toLocaleString()}`
-    : 'Price not available'}
-</h2>
-      <p className="text-gray-700 text-sm">{expandedCard.fullAddress}</p>
-    </div>
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold">
+              {expandedCard.unformattedPrice
+                ? `$${Number(expandedCard.unformattedPrice).toLocaleString()}`
+                : expandedCard.price
+                ? `$${Number(
+                    String(expandedCard.price).replace(/[^0-9.-]+/g, '')
+                  ).toLocaleString()}`
+                : 'Price not available'}
+            </h2>
+            <p className="text-gray-700 text-sm">{expandedCard.fullAddress}</p>
+          </div>
 
-    <hr className="my-4 border-t border-gray-300" />
+          <hr className="my-4 border-t border-gray-300" />
 
     {/* Property Details */}
     <div className="text-center space-y-1">
@@ -351,7 +348,7 @@ const monthlyPayment = expandedCard
       </div>
     </div>
 
-    <hr className="my-4 border-t border-gray-300" />
+          <hr className="my-4 border-t border-gray-300" />
 
     {/* Listing Info */}
     <div className="text-center space-y-1">
@@ -364,7 +361,7 @@ const monthlyPayment = expandedCard
       )}
     </div>
 
-    <hr className="my-4 border-t border-gray-300" />
+          <hr className="my-4 border-t border-gray-300" />
 
     {/* Mortgage Calculator */}
     <div className="text-center space-y-2">
@@ -373,39 +370,39 @@ const monthlyPayment = expandedCard
         📆 ${monthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}/month (est.)
       </p>
 
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-sm mt-2">
-        <label className="flex items-center gap-2">
-          Down Payment (%):
-          <input
-            type="number"
-            value={downPaymentPercent}
-            onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
-            className="border rounded px-2 py-1 w-20 text-center"
-          />
-        </label>
-        <label className="flex items-center gap-2">
-          Interest Rate (%):
-          <input
-            type="number"
-            value={interestRate}
-            step="0.1"
-            onChange={(e) => setInterestRate(Number(e.target.value))}
-            className="border rounded px-2 py-1 w-20 text-center"
-          />
-        </label>
-        <label className="flex items-center gap-2">
-          Loan Term (years):
-          <input
-            type="number"
-            value={loanTermYears}
-            onChange={(e) => setLoanTermYears(Number(e.target.value))}
-            className="border rounded px-2 py-1 w-20 text-center"
-          />
-        </label>
-      </div>
-    </div>
-  </motion.div>
-)}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-sm mt-2">
+              <label className="flex items-center gap-2">
+                Down Payment (%):
+                <input
+                  type="number"
+                  value={downPaymentPercent}
+                  onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
+                  className="border rounded px-2 py-1 w-20 text-center"
+                />
+              </label>
+              <label className="flex items-center gap-2">
+                Interest Rate (%):
+                <input
+                  type="number"
+                  value={interestRate}
+                  step="0.1"
+                  onChange={(e) => setInterestRate(Number(e.target.value))}
+                  className="border rounded px-2 py-1 w-20 text-center"
+                />
+              </label>
+              <label className="flex items-center gap-2">
+                Loan Term (years):
+                <input
+                  type="number"
+                  value={loanTermYears}
+                  onChange={(e) => setLoanTermYears(Number(e.target.value))}
+                  className="border rounded px-2 py-1 w-20 text-center"
+                />
+              </label>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }
