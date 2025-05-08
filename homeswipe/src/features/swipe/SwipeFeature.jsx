@@ -267,9 +267,8 @@ function SwipeFeatureComponent() {
                   onNextImage={handleNextImage}
                   onPrevImage={handlePrevImage}
                   onExpand={handleExpand}
-                  motionY = {motionY}
                   style={{ zIndex: cards.length - index }}
-                  animationDirection={card.animationDirection || 0} // Pass direction, default 0
+                  animationDirection={card.animationDirection || 0}
                 />
               );
             })}

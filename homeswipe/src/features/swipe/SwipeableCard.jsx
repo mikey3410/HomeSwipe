@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate } from '
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 import Modal from '@mui/material/Modal';
 import RoomIcon from '@mui/icons-material/Room';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import './ImageCarousel.css';
 
 const MAPS_API_KEY = "AIzaSyDJECvM3jb_FcjFVBSRKHkdxCJgeimdPHY";
@@ -218,7 +219,7 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
             bottom: '3.5rem',
             left: '1rem',
             color: '#fff',
-            background: 'rgba(0, 0, 0, 0.6)',
+            background: 'rgba(0, 0, 0, 0.5)',
             borderRadius: '12px',
             padding: '0.5rem 1rem',
             fontSize: '1rem',
@@ -226,9 +227,10 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
             zIndex: 2
           }}
         >
-          🛏 {card.bedrooms || 'N/A'} Beds • {card.bathrooms || 'N/A'} Baths
+          🛏 {card.bedrooms || 'N/A'} Beds • 🛁 {card.bathrooms || 'N/A'} Baths
         </div>
 
+        {/* Drag indicator with emoji and text */}
         <div
           style={{
             position: 'absolute',
@@ -236,15 +238,26 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
             left: '50%',
             transform: 'translateX(-50%)',
             backgroundColor: '#fff',
-            padding: '0.4rem 1rem',
+            padding: '0.25rem 0.5rem',
             borderRadius: '999px',
             boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-            fontSize: '0.8rem',
+            fontSize: '0.70rem',
             color: '#444',
+            fontWeight: 500,
+            letterSpacing: '0.01em',
             cursor: 'pointer',
-            zIndex: 2
+            zIndex: 2,
+            userSelect: 'none',
+            minWidth: '100px',
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.3rem',
+            justifyContent: 'flex-start',
           }}
         >
+          <span style={{ fontSize: '1.25rem', marginRight: '0.2rem' }}>⬆️</span>
+          <span>Swipe up for details</span>
         </div>
 
         <div className="image-counter">
@@ -274,52 +287,42 @@ const SwipeableCard = forwardRef(({ card, onSwipe, onExpand, onNextImage, onPrev
             position: 'absolute',
             top: '15px',
             right: '15px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            color: '#fff',
+            padding: '12px 20px',
+            borderRadius: '16px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
+            minWidth: '180px',
+            maxWidth: '320px',
+            zIndex: 2,
+            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-end',
-            gap: '0.5rem',
-            zIndex: 2
+            alignItems: 'center',
+            gap: '0.3rem',
           }}
         >
-          {/* Price box */}
           <div
             style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.85)',
-              color: '#fff',
-              padding: '8px 18px',
-              borderRadius: '12px',
-              fontSize: '1.3rem',
+              fontSize: '1.35rem',
               fontWeight: 'bold',
               fontFamily: 'system-ui, sans-serif',
-              minWidth: '120px',
-              textAlign: 'center',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-              maxWidth: '220px',
+              marginBottom: '2px',
+              whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              width: '100%',
             }}
           >
             {card.price ? `$${Number(card.price).toLocaleString()}` : 'N/A'}
           </div>
-          {/* Address box */}
           <div
             style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-              color: '#fff',
-              padding: '7px 14px',
-              borderRadius: '10px',
-              fontSize: '0.95rem',
+              fontSize: '1.05rem',
               fontWeight: 500,
               fontFamily: 'system-ui, sans-serif',
-              maxWidth: '220px',
-              minWidth: '120px',
-              textAlign: 'center',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
               wordBreak: 'break-word',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'normal',
+              width: '100%',
             }}
           >
             {card.fullAddress || `${card.name || ''}, ${card.city || ''}, ${card.state || ''} ${card.zip || ''}`}
