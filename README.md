@@ -29,7 +29,7 @@ The frontend runs by default at: http://localhost:5173
 
 
 
-## 🌐 3. Run the Backend (Express API)
+### 🌐 3. Run the Backend (Express API)
 
 In a separate terminal, start the backend:
 cd homeswipe/server
@@ -37,13 +37,13 @@ npm install
 node index.js
 
 
-## 📫 Authors
+### 📫 Authors
 	•	Davery Valdez
 	•	Michael Munoz
 	•	Ryan Lucero
 	•	Brady Scaggari
 
 
-📄 License
+### 📄 License
 
 For academic use only. Contact the team for deployment inquiries or open source licensing.
